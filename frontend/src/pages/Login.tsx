@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import ky from 'ky'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { loginSchema, LoginSchemaType } from '../schemas/login'
 
 const Login = () => {
@@ -69,6 +69,12 @@ const Login = () => {
             Login
           </button>
         </form>
+        <div className="flex gap-2 text-sm mt-3 items-center justify-center">
+          <p className="">Don't have an account?</p>
+          <Link to="/signup" className="underline text-red-500">
+            Create one
+          </Link>
+        </div>
       </div>
     </section>
   )
