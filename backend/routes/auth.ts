@@ -1,12 +1,12 @@
 import { Router } from 'express'
-import { login } from '../controllers/auth.js'
+import { addUser, login } from '../controllers/auth.js'
 import { validateData } from '../middleware/validationMiddleware.js'
-import { loginSchema } from '../schemas/auth.js'
+import { loginSchema, registerSchema } from '../schemas/auth.js'
 
 const router = Router()
 
 router.post('/login', validateData(loginSchema), login)
-router.post('/register')
+router.post('/register', validateData(registerSchema), addUser)
 router.get('/:id')
 
 export default router
