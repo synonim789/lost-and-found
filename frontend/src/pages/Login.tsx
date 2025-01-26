@@ -26,6 +26,11 @@ const Login = () => {
     navigate('/')
   }
 
+  const loginAsGuest = () => {
+    localStorage.setItem('authToken', 'guestUser')
+    navigate('/')
+  }
+
   return (
     <section className="h-screen flex items-center justify-center flex-col gap-5">
       <h1 className="text-2xl font-semibold">
@@ -33,6 +38,12 @@ const Login = () => {
       </h1>
       <div className="bg-slate-900 p-5 rounded-lg">
         <h3 className="text-xl font-semibold text-center mb-5">Login</h3>
+        <button
+          className="text-center underline hover:text-red-600 transition cursor-pointer w-full"
+          onClick={loginAsGuest}
+        >
+          Log in as a guest
+        </button>
         <form
           onSubmit={handleSubmit(submitHandler)}
           className="flex flex-col gap-5 w-[300px]"
