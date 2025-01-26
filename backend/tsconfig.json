@@ -14,6 +14,7 @@
     "module": "NodeNext",
     "outDir": "dist",
     "sourceMap": true,
+    "typeRoots": ["@types", "./node_modules/@types"],
     "lib": ["es2022"]
   }
 }
