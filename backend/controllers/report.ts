@@ -1,5 +1,5 @@
 import type { Request, RequestHandler, Response } from 'express'
-import type { ReportSchemaType } from '../schemas/report.js'
+import type { AddReportSchemaType } from '../schemas/report.js'
 import { initializeRedisClient } from '../utils/client.js'
 import { db } from '../utils/db.js'
 
@@ -26,7 +26,7 @@ export const getAllReports: RequestHandler = async (req, res) => {
 export const addReport: RequestHandler = async (req, res) => {
   try {
     const { description, image, latitude, longtitude, title, type } =
-      req.body as ReportSchemaType
+      req.body as AddReportSchemaType
     const userId = req.userId
 
     const user = await db.user.findUnique({ where: { id: userId } })
@@ -53,6 +53,8 @@ export const addReport: RequestHandler = async (req, res) => {
 
     res.status(200).json({ data: report })
   } catch (error) {
+    console.log(error)
+
     res.status(400).json({ message: 'There was an error' })
   }
 }
