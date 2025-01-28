@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import icon from '../assets/icon.png'
 import { ReportType } from '../types'
+import { center } from '../constants'
 
 const MainMap = () => {
   const [reports, setReports] = useState<ReportType[]>([])
@@ -26,7 +27,7 @@ const MainMap = () => {
 
   return (
     <MapContainer
-      center={[52.409538, 16.931992]}
+      center={[center.lat, center.lng]}
       zoom={13}
       scrollWheelZoom={false}
     >
