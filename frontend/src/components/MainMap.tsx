@@ -3,8 +3,8 @@ import { Icon } from 'leaflet'
 import { useEffect, useState } from 'react'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import icon from '../assets/icon.png'
-import { ReportType } from '../types'
 import { center } from '../constants'
+import { ReportType } from '../types'
 
 const MainMap = () => {
   const [reports, setReports] = useState<ReportType[]>([])
@@ -29,7 +29,7 @@ const MainMap = () => {
     <MapContainer
       center={[center.lat, center.lng]}
       zoom={13}
-      scrollWheelZoom={false}
+      scrollWheelZoom={true}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
