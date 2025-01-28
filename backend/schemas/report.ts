@@ -5,8 +5,8 @@ export const reportSchema = z.object({
   image: z.string().min(1),
   description: z.string().min(1),
   type: z.enum(['FOUND', 'LOST']),
-  latitude: z.string().min(1),
-  longtitude: z.string().min(1),
+  latitude: z.number(),
+  longtitude: z.number(),
   userId: z.number(),
 })
 

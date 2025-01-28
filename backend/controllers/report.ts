@@ -29,7 +29,8 @@ export const addReport: RequestHandler = async (req, res) => {
       req.body as ReportSchemaType
     const userId = req.userId
 
-    const user = await db.user.findFirst({ where: { id: userId } })
+    const user = await db.user.findUnique({ where: { id: userId } })
+
     if (!user) {
       res.status(401).json({ message: 'User not allowed' })
       return
