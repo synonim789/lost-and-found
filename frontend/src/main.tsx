@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Route, Routes } from 'react-router'
 
+import 'leaflet/dist/leaflet.css'
 import GuestRoute from './auth/GuestRoute'
 import PrivateRoute from './auth/PrivateRoute'
 import './index.css'
