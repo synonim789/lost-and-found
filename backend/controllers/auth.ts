@@ -47,6 +47,7 @@ export const addUser: RequestHandler = async (req, res) => {
 
     if (exists) {
       res.status(409).json({ message: 'User with this email already exists' })
+      return
     }
 
     const passwordHash = await hash(passwordRaw, 10)
