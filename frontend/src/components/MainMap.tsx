@@ -5,6 +5,7 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import icon from '../assets/icon.png'
 import { center, REPORT_TYPE } from '../constants'
 import { ReportType } from '../types'
+import { getImage } from '../utils'
 
 const MainMap = () => {
   const [reports, setReports] = useState<ReportType[]>([])
@@ -48,9 +49,16 @@ const MainMap = () => {
               key={report.id}
             >
               <Popup>
-                <h2 className="text-lg font-bold">{report.title}</h2>
-                <p>{report.description}</p>
-                <p className={`${color} font-bold text-lg`}>{label}</p>
+                <div className="w-full">
+                  <h2 className="text-lg font-bold">{report.title}</h2>
+                  <img
+                    src={getImage(report.image)}
+                    alt=""
+                    className="w-60 h-full"
+                  />
+                  <p>{report.description}</p>
+                  <p className={`${color} font-bold text-lg`}>{label}</p>
+                </div>
               </Popup>
             </Marker>
           )
