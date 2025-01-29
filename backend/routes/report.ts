@@ -1,5 +1,9 @@
 import { Router } from 'express'
-import { addReport, getAllReports } from '../controllers/report.js'
+import {
+  addReport,
+  deleteReport,
+  getAllReports,
+} from '../controllers/report.js'
 import { validateData } from '../middleware/validationMiddleware.js'
 import { addReportSchema } from '../schemas/report.js'
 import { verifyJWT } from '../utils/jwt.js'
@@ -15,5 +19,6 @@ router.post(
   addReport
 )
 router.get('/', getAllReports)
+router.delete('/:id', verifyJWT, deleteReport)
 
 export default router
