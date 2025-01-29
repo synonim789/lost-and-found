@@ -50,7 +50,7 @@ const PopupContent = ({ report, getReports }: Props) => {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mt-4">
         <h2 className="text-lg font-bold">{report.title}</h2>
         {report.user.id === user?.id && (
           <div className="flex items-center gap-3 text-base">
@@ -79,7 +79,7 @@ const PopupContent = ({ report, getReports }: Props) => {
       <p className={`${color} font-bold text-lg`}>{label}</p>
       <div className="mb-4 flex flex-col gap-4 bg-gray-50 p-4 rounded-lg shadow-md">
         {report.comments.map((comment) => (
-          <Comment comment={comment} />
+          <Comment comment={comment} getReports={getReports} key={comment.id} />
         ))}
         <CommentForm reportId={report.id} getReports={getReports} />
       </div>
