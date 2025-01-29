@@ -3,7 +3,10 @@ import type { Request, RequestHandler, Response } from 'express'
 import fs from 'fs'
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
-import type { AddReportSchemaType } from '../schemas/report.js'
+import type {
+  addCommentSchemaType,
+  AddReportSchemaType,
+} from '../schemas/report.js'
 import { initializeRedisClient } from '../utils/client.js'
 import { db } from '../utils/db.js'
 
@@ -18,7 +21,10 @@ export const getAllReports: RequestHandler = async (req, res) => {
     }
 
     const reports = await db.report.findMany({
-      include: { user: { omit: { password: true } } },
+      include: {
+        user: { omit: { password: true } },
+        comments: { include: { user: { omit: { password: true } } } },
+      },
     })
     await client.setEx('all-reports', 3600, JSON.stringify(reports))
 
@@ -118,5 +124,35 @@ export const deleteReport = async (
     res.status(200).json({ message: 'Report deleted successfully' })
   } catch (error) {
     res.status(400).json({ message: 'There was an error' })
+  }
+}
+
+export const addComment: RequestHandler = async (req, res) => {
+  try {
+    const reportId = Number(req.params.id!)
+    const userId = req.userId
+
+    const report = await db.report.findFirst({ where: { id: reportId } })
+
+    if (!report) {
+      res.status(404).json({ message: 'Report Not Found' })
+    }
+
+    const { text } = req.body as addCommentSchemaType
+
+    const comment = await db.comment.create({
+      data: {
+        text,
+        reportId,
+        userId,
+      },
+    })
+
+    const client = await initializeRedisClient()
+    await client.del('all-reports')
+
+    res.status(200).json(comment)
+  } catch (error) {
+    res.status(500).json({ message: 'There was an error' })
   }
 }

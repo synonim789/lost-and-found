@@ -20,5 +20,10 @@ export const addReportSchema = zfd.formData({
   longtitude: zfd.text(z.string().min(1)),
 })
 
+export const addCommentSchema = z.object({
+  text: z.string(),
+})
+
 export type ReportSchemaType = z.infer<typeof reportSchema>
 export type AddReportSchemaType = z.infer<typeof addReportSchema>
+export type addCommentSchemaType = z.infer<typeof addCommentSchema>
