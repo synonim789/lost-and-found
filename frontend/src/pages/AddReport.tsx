@@ -8,6 +8,7 @@ import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
 import { center } from '../constants'
 import { addReportSchema, AddReportShemaType } from '../schemas/addReport'
+import { ReportType } from '../types'
 
 export const AddReport = () => {
   const [positon, setPosition] = useState<{
@@ -31,24 +32,33 @@ export const AddReport = () => {
     title,
     type,
   }) => {
-    const { data } = await ky
-      .post('http://localhost:3000/report', {
-        json: {
-          description,
-          title,
-          image,
-          type,
-          longtitude: positon.lng,
-          latitude: positon.lat,
-        },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .json()
+    try {
+      const formData = new FormData()
+      formData.append('description', description)
+      formData.append('title', title)
+      formData.append('type', type)
+      formData.append('longtitude', positon.lng.toString())
+      formData.append('latitude', positon.lat.toString())
 
-    console.log(data)
-    navigate('/')
+      const file = image[0]
+      if (file) {
+        formData.append('image', file)
+      }
+
+      const { data } = await ky
+        .post('http://localhost:3000/report', {
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .json<{ data: ReportType }>()
+
+      console.log(data)
+      navigate('/')
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -91,10 +101,10 @@ export const AddReport = () => {
           <div className="w-96">
             <label htmlFor="image">Image:</label>
             <input
-              type="text"
+              type="file"
               {...register('image')}
               className="block bg-slate-800 px-1 py-2 rounded-lg w-full mt-1"
-              placeholder="Image"
+              accept='image/*'
             />
           </div>
           <button
