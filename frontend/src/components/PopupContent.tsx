@@ -1,6 +1,7 @@
-import ky from 'ky'
+import ky, { HTTPError } from 'ky'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import { Link } from 'react-router'
+import { toast } from 'react-toastify'
 import { REPORT_TYPE } from '../constants'
 import { useUser } from '../context/userContext'
 import { ReportType } from '../types'
@@ -24,9 +25,13 @@ const PopupContent = ({ report, getReports }: Props) => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .json<{ message: string }>()
+      toast.success(message)
       await getReports()
     } catch (error) {
-      console.log(error)
+      if (error instanceof HTTPError) {
+        const errorJson = await error.response.json<{ message: string }>()
+        toast.error(errorJson.message)
+      }
     }
   }
 

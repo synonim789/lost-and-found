@@ -25,23 +25,34 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        const response = await ky
-          .get('http://localhost:3000/auth/me', {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .json<User>()
+      if (token !== 'guestUser') {
+        try {
+          const response = await ky
+            .get('http://localhost:3000/auth/me', {
+              headers: { Authorization: `Bearer ${token}` },
+            })
+            .json<User>()
 
-        setUser(response)
-      } catch (error) {
-        setError('Failed to fetch user')
-        console.log(error)
-      } finally {
+          setUser(response)
+        } catch (error) {
+          setError('Failed to fetch user')
+          console.log(error)
+        } finally {
+          setLoading(false)
+        }
+      } else {
+        setUser({
+          id: 999999,
+          email: 'guest',
+          lastName: 'guest',
+          name: 'guest',
+        })
         setLoading(false)
       }
     }
+
     fetchUser()
-  }, [])
+  }, [token])
   return (
     <UserContext.Provider value={{ error, loading, user }}>
       {children}

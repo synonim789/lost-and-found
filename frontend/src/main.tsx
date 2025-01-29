@@ -2,6 +2,7 @@ import 'leaflet/dist/leaflet.css'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Route, Routes } from 'react-router'
+import { ToastContainer } from 'react-toastify'
 import GuestRoute from './auth/GuestRoute'
 import PrivateRoute from './auth/PrivateRoute'
 import { UserProvider } from './context/userContext'
@@ -27,6 +28,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/signup" element={<SignUp />} />
           </Route>
         </Routes>
+        <ToastContainer theme="dark" />
       </UserProvider>
     </BrowserRouter>
   </StrictMode>

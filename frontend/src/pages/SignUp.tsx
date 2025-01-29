@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import ky from 'ky'
+import ky, { HTTPError } from 'ky'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router'
+import { toast } from 'react-toastify'
 import { signUpSchema, SignUpSchemaType } from '../schemas/signUp'
 
 const SignUp = () => {
@@ -19,13 +20,20 @@ const SignUp = () => {
     lastName,
     name,
   }) => {
-    const { token } = await ky
-      .post('http://localhost:3000/auth/register', {
-        json: { email, passwordRaw: password, name, lastName },
-      })
-      .json<{ token: string }>()
-    localStorage.setItem('authToken', token)
-    navigate('/')
+    try {
+      const { token } = await ky
+        .post('http://localhost:3000/auth/register', {
+          json: { email, passwordRaw: password, name, lastName },
+        })
+        .json<{ token: string }>()
+      localStorage.setItem('authToken', token)
+      navigate('/')
+    } catch (error) {
+      if (error instanceof HTTPError) {
+        const errorJson = await error.response.json<{ message: string }>()
+        toast.error(errorJson.message)
+      }
+    }
   }
 
   return (

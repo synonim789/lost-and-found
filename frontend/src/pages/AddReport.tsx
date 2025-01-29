@@ -1,8 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import ky from 'ky'
+import ky, { HTTPError } from 'ky'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
+import { toast } from 'react-toastify'
 import AddReportMap from '../components/AddReportMap'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
@@ -45,7 +46,7 @@ export const AddReport = () => {
         formData.append('image', file)
       }
 
-      const { data } = await ky
+      await ky
         .post('http://localhost:3000/report', {
           body: formData,
           headers: {
@@ -54,10 +55,13 @@ export const AddReport = () => {
         })
         .json<{ data: ReportType }>()
 
-      console.log(data)
       navigate('/')
+      toast.success('Report added successfully')
     } catch (error) {
-      console.log(error)
+      if (error instanceof HTTPError) {
+        const errorJson = await error.response.json<{ message: string }>()
+        toast.error(errorJson.message)
+      }
     }
   }
 
@@ -78,6 +82,9 @@ export const AddReport = () => {
               className="block bg-slate-800 px-1 py-2 rounded-lg w-full mt-1"
               placeholder="Title:"
             />
+            {errors.title?.message && (
+              <p className="text-red-500">{errors.title.message}</p>
+            )}
           </div>
           <div className="w-96">
             <label htmlFor="description">Description:</label>
@@ -87,6 +94,9 @@ export const AddReport = () => {
               className="block bg-slate-800 px-1 py-2 rounded-lg w-full mt-1 resize-none h-32"
               placeholder="Description:"
             />
+            {errors.description?.message && (
+              <p className="text-red-500">{errors.description.message}</p>
+            )}
           </div>
           <div className="w-96">
             <label htmlFor="type">Type:</label>
@@ -97,6 +107,9 @@ export const AddReport = () => {
               <option value="FOUND">Found</option>
               <option value="LOST">Lost</option>
             </select>
+            {errors.type?.message && (
+              <p className="text-red-500">{errors.type.message}</p>
+            )}
           </div>
           <div className="w-96">
             <label htmlFor="image">Image:</label>
@@ -104,7 +117,7 @@ export const AddReport = () => {
               type="file"
               {...register('image')}
               className="block bg-slate-800 px-1 py-2 rounded-lg w-full mt-1"
-              accept='image/*'
+              accept="image/*"
             />
           </div>
           <button

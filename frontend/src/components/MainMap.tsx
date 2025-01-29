@@ -19,7 +19,6 @@ const MainMap = () => {
     const { data } = await ky
       .get('http://localhost:3000/report')
       .json<{ data: ReportType[] }>()
-    console.log(data)
 
     setReports(data)
   }
