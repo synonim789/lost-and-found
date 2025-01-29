@@ -32,7 +32,7 @@ export const login: RequestHandler = async (req, res) => {
 
     res.status(200).json({ token })
   } catch (error) {
-    res.status(400).json({ message: 'There was an error' })
+    res.status(500).json({ message: 'There was an error' })
   }
 }
 
@@ -66,6 +66,7 @@ export const addUser: RequestHandler = async (req, res) => {
 
     res.status(200).json({ token })
   } catch (error) {
-    res.status(400).json({ message: 'There was an error' })
+    console.log(error)
+    res.status(500).json({ message: 'There was an error' })
   }
 }
