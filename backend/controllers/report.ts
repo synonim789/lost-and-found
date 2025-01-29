@@ -156,3 +156,35 @@ export const addComment: RequestHandler = async (req, res) => {
     res.status(500).json({ message: 'There was an error' })
   }
 }
+
+export const removeComment: RequestHandler = async (req, res) => {
+  try {
+    const commentId = Number(req.params.id)
+    const userId = req.userId
+
+    const comment = await db.comment.findFirst({ where: { id: commentId } })
+
+    if (!comment) {
+      res.status(404).json({ comment: 'Report Not Found' })
+      return
+    }
+
+    if (comment?.userId !== userId) {
+      res.status(403).json({ message: 'Not authorized to delete this comment' })
+      return
+    }
+
+    await db.comment.delete({
+      where: {
+        id: commentId,
+      },
+    })
+
+    const client = await initializeRedisClient()
+    await client.del('all-reports')
+
+    res.status(200).json({ message: 'Comment removed successfully' })
+  } catch (error) {
+    res.status(500).json({ message: 'There was an error' })
+  }
+}

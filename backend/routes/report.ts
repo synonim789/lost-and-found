@@ -4,6 +4,7 @@ import {
   addReport,
   deleteReport,
   getAllReports,
+  removeComment,
 } from '../controllers/report.js'
 import { validateData } from '../middleware/validationMiddleware.js'
 import { addCommentSchema, addReportSchema } from '../schemas/report.js'
@@ -21,11 +22,13 @@ router.post(
 )
 router.get('/', getAllReports)
 router.delete('/:id', verifyJWT, deleteReport)
+
 router.post(
   '/:id/comment',
   validateData(addCommentSchema),
   verifyJWT,
   addComment
 )
+router.delete('/comment/:id', verifyJWT, removeComment)
 
 export default router
