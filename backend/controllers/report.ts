@@ -1,5 +1,8 @@
 import { Prisma } from '@prisma/client'
 import type { Request, RequestHandler, Response } from 'express'
+import fs from 'fs'
+import path, { dirname } from 'path'
+import { fileURLToPath } from 'url'
 import type { AddReportSchemaType } from '../schemas/report.js'
 import { initializeRedisClient } from '../utils/client.js'
 import { db } from '../utils/db.js'
@@ -14,7 +17,9 @@ export const getAllReports: RequestHandler = async (req, res) => {
       return
     }
 
-    const reports = await db.report.findMany()
+    const reports = await db.report.findMany({
+      include: { user: { omit: { password: true } } },
+    })
     await client.setEx('all-reports', 3600, JSON.stringify(reports))
 
     res.status(200).json({ data: reports })
@@ -73,20 +78,40 @@ export const deleteReport = async (
 ) => {
   try {
     const id = Number(req.params.id)
+    const userId = req.userId
 
-    const reportExists = await db.report.findFirst({
+    const report = await db.report.findFirst({
       where: { id },
     })
 
-    if (!reportExists) {
+    if (!report) {
       res.status(404).json({ message: 'Report not found' })
+      return
     }
+
+    if (report.userId !== userId) {
+      res.status(403).json({ message: 'Not authorized to delete this report' })
+      return
+    }
+
+    const __filename = fileURLToPath(import.meta.url)
+    const __dirname = dirname(__filename)
 
     await db.report.delete({
       where: {
         id,
       },
     })
+
+    if (report.image) {
+      const imagePath = path.join(__dirname, '..', report.image)
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.error('Error deleting image:', err)
+        }
+      })
+    }
+
     const client = await initializeRedisClient()
     await client.del('all-reports')
 
