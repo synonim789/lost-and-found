@@ -9,9 +9,9 @@ const router = Router()
 
 router.post(
   '/',
+  uploadReportImage,
   validateData(addReportSchema),
   verifyJWT,
-  uploadReportImage,
   addReport
 )
 router.get('/', getAllReports)

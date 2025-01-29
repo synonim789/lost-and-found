@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import type { Request, RequestHandler, Response } from 'express'
 import type { AddReportSchemaType } from '../schemas/report.js'
 import { initializeRedisClient } from '../utils/client.js'
@@ -46,8 +47,8 @@ export const addReport: RequestHandler = async (req, res) => {
     const report = await db.report.create({
       data: {
         description,
-        latitude,
-        longtitude,
+        latitude: new Prisma.Decimal(latitude),
+        longtitude: new Prisma.Decimal(longtitude),
         title,
         userId,
         type,

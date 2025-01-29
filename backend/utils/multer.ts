@@ -1,5 +1,9 @@
 import multer, { diskStorage } from 'multer'
-import path from 'path'
+import path, { dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 const storage = diskStorage({
   destination: (req, file, cb) => {
