@@ -1,4 +1,10 @@
 export type ReportType = {
+  user: {
+    name: string
+    id: number
+    email: string
+    lastName: string
+  }
   id: number
   title: string
   image: string
@@ -7,4 +13,11 @@ export type ReportType = {
   latitude: number
   longtitude: number
   userId: string
+}
+
+export type User = {
+  name: string
+  id: number
+  email: string
+  lastName: string
 }
