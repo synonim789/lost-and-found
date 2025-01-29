@@ -25,7 +25,14 @@ export const getAllReports: RequestHandler = async (req, res) => {
 
 export const addReport: RequestHandler = async (req, res) => {
   try {
-    const { description, image, latitude, longtitude, title, type } =
+    const imageFile = req.file
+
+    if (!imageFile) {
+      res.status(400).json({ message: 'Image is required' })
+      return
+    }
+
+    const { description, latitude, longtitude, title, type } =
       req.body as AddReportSchemaType
     const userId = req.userId
 
@@ -44,7 +51,7 @@ export const addReport: RequestHandler = async (req, res) => {
         title,
         userId,
         type,
-        image,
+        image: `/uploads/${imageFile.filename}`,
       },
     })
 
