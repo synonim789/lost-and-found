@@ -6,6 +6,8 @@ import { REPORT_TYPE } from '../constants'
 import { useUser } from '../context/userContext'
 import { ReportType } from '../types'
 import { getImage } from '../utils'
+import Comment from './Comment'
+import CommentForm from './CommentForm'
 
 type Props = {
   report: ReportType
@@ -15,6 +17,8 @@ type Props = {
 const PopupContent = ({ report, getReports }: Props) => {
   const color = REPORT_TYPE.find((r) => r.value === report.type)?.color
   const label = REPORT_TYPE.find((r) => r.value === report.type)?.label
+
+  console.log(report)
 
   const token = localStorage.getItem('authToken')
 
@@ -73,6 +77,12 @@ const PopupContent = ({ report, getReports }: Props) => {
       <img src={getImage(report.image)} alt="" className="w-60 h-full" />
       <p className="text-base">{report.description}</p>
       <p className={`${color} font-bold text-lg`}>{label}</p>
+      <div className="mb-4 flex flex-col gap-4 bg-gray-50 p-4 rounded-lg shadow-md">
+        {report.comments.map((comment) => (
+          <Comment comment={comment} />
+        ))}
+        <CommentForm reportId={report.id} getReports={getReports} />
+      </div>
     </div>
   )
 }

@@ -3,3 +3,7 @@
 .leaflet-container {
   height: 100vh;
 }
+
+.leaflet-popup-content p {
+  margin: 0;
+}

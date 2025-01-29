@@ -13,6 +13,16 @@ export type ReportType = {
   latitude: number
   longtitude: number
   userId: string
+  comments: CommentType[]
+}
+
+export type CommentType = {
+  id: number
+  text: string
+  createdAt: string
+  reportId: number
+  userId: number
+  user: User
 }
 
 export type User = {
