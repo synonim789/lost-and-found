@@ -34,7 +34,7 @@ const AddReportMap = ({ position, setPosition }: Props) => {
         }
       },
     }),
-    []
+    [setPosition]
   )
 
   return (
