@@ -26,6 +26,7 @@ const EditReport = () => {
     register,
     formState: { errors },
     handleSubmit,
+    watch,
   } = useForm<EditReportSchemaType>({
     resolver: zodResolver(editReportSchema),
   })
@@ -146,12 +147,23 @@ const EditReport = () => {
           </div>
           <div className="w-96">
             <label htmlFor="image">Image:</label>
-            <input
-              type="file"
-              {...register('image')}
-              className="block bg-slate-800 px-1 py-2 rounded-lg w-full mt-1"
-              accept="image/*"
-            />
+            <div className="relative bg-slate-800 px-1 py-2 rounded-lg w-full mt-1 flex items-center justify-between cursor-pointer">
+              <span>{watch('image')?.[0]?.name || 'Choose a file...'}</span>
+              <label
+                htmlFor="image"
+                className="bg-red-700 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-red-600 transition"
+              >
+                Browse
+              </label>
+              <input
+                type="file"
+                {...register('image')}
+                name="image"
+                id="image"
+                className="hidden"
+                accept="image/*"
+              />
+            </div>
           </div>
           <button
             type="submit"
