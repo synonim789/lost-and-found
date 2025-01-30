@@ -4,7 +4,7 @@ let redis: RedisClientType | null = null
 
 export const initializeRedisClient = async () => {
   if (!redis) {
-    redis = createClient()
+    redis = createClient({ url: 'redis://redis' })
     redis.on('error', (err) => {
       console.error(err)
     })
