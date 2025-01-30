@@ -188,3 +188,20 @@ export const removeComment: RequestHandler = async (req, res) => {
     res.status(500).json({ message: 'There was an error' })
   }
 }
+
+export const getSingleReport: RequestHandler = async (req, res) => {
+  try {
+    const reportId = Number(req.params.id!)
+
+    const report = await db.report.findFirst({ where: { id: reportId } })
+
+    if (!report) {
+      res.status(404).json({ message: 'Report not found' })
+      return
+    }
+
+    res.status(200).json(report)
+  } catch (error) {
+    res.status(500).json({ message: 'There was an error' })
+  }
+}

@@ -4,6 +4,7 @@ import {
   addReport,
   deleteReport,
   getAllReports,
+  getSingleReport,
   removeComment,
 } from '../controllers/report.js'
 import { validateData } from '../middleware/validationMiddleware.js'
@@ -21,6 +22,7 @@ router.post(
   addReport
 )
 router.get('/', getAllReports)
+router.get('/:id', getSingleReport)
 router.delete('/:id', verifyJWT, deleteReport)
 
 router.post(
