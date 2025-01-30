@@ -3,12 +3,17 @@ import {
   addComment,
   addReport,
   deleteReport,
+  editReport,
   getAllReports,
   getSingleReport,
   removeComment,
 } from '../controllers/report.js'
 import { validateData } from '../middleware/validationMiddleware.js'
-import { addCommentSchema, addReportSchema } from '../schemas/report.js'
+import {
+  addCommentSchema,
+  addReportSchema,
+  editReportSchema,
+} from '../schemas/report.js'
 import { verifyJWT } from '../utils/jwt.js'
 import { uploadReportImage } from '../utils/multer.js'
 
@@ -24,6 +29,13 @@ router.post(
 router.get('/', getAllReports)
 router.get('/:id', getSingleReport)
 router.delete('/:id', verifyJWT, deleteReport)
+router.put(
+  '/:id',
+  uploadReportImage,
+  validateData(editReportSchema),
+  verifyJWT,
+  editReport
+)
 
 router.post(
   '/:id/comment',

@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url'
 import type {
   addCommentSchemaType,
   AddReportSchemaType,
+  EditReportSchemaType,
 } from '../schemas/report.js'
 import { initializeRedisClient } from '../utils/client.js'
 import { db } from '../utils/db.js'
@@ -193,7 +194,13 @@ export const getSingleReport: RequestHandler = async (req, res) => {
   try {
     const reportId = Number(req.params.id!)
 
-    const report = await db.report.findFirst({ where: { id: reportId } })
+    const report = await db.report.findFirst({
+      where: { id: reportId },
+      include: {
+        user: { omit: { password: true } },
+        comments: { include: { user: { omit: { password: true } } } },
+      },
+    })
 
     if (!report) {
       res.status(404).json({ message: 'Report not found' })
@@ -201,6 +208,60 @@ export const getSingleReport: RequestHandler = async (req, res) => {
     }
 
     res.status(200).json(report)
+  } catch (error) {
+    res.status(500).json({ message: 'There was an error' })
+  }
+}
+
+export const editReport: RequestHandler = async (req, res) => {
+  try {
+    const reportId = Number(req.params.id!)
+    const userId = req.userId
+    const imageFile = req.file
+
+    const report = await db.report.findFirst({ where: { id: reportId } })
+
+    if (!report) {
+      res.status(404).json({ message: 'Report not found' })
+      return
+    }
+
+    if (report.userId !== userId) {
+      res.status(403).json({ message: 'Unauthorized to update this report' })
+      return
+    }
+
+    const __filename = fileURLToPath(import.meta.url)
+    const __dirname = dirname(__filename)
+
+    if (report.image && imageFile) {
+      const imagePath = path.join(__dirname, '..', report.image)
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.error('Error deleting image:', err)
+        }
+      })
+    }
+
+    const { description, latitude, longtitude, title, type } =
+      req.body as EditReportSchemaType
+
+    const updatedReport = await db.report.update({
+      where: { id: reportId },
+      data: {
+        description,
+        title,
+        latitude,
+        longtitude,
+        type,
+        image: imageFile ? `/uploads/${imageFile.filename}` : report.image,
+      },
+    })
+
+    const client = await initializeRedisClient()
+    await client.del('all-reports')
+
+    res.status(200).json(updatedReport)
   } catch (error) {
     res.status(500).json({ message: 'There was an error' })
   }

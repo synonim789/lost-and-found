@@ -20,6 +20,15 @@ export const addReportSchema = zfd.formData({
   longtitude: zfd.text(z.string().min(1)),
 })
 
+export const editReportSchema = zfd.formData({
+  title: zfd.text(z.string().min(1)),
+  image: zfd.file(z.any()),
+  description: zfd.text(z.string().min(1)),
+  type: zfd.text(z.enum(['FOUND', 'LOST'])),
+  latitude: zfd.text(z.string().min(1)),
+  longtitude: zfd.text(z.string().min(1)),
+})
+
 export const addCommentSchema = z.object({
   text: z.string(),
 })
@@ -27,3 +36,4 @@ export const addCommentSchema = z.object({
 export type ReportSchemaType = z.infer<typeof reportSchema>
 export type AddReportSchemaType = z.infer<typeof addReportSchema>
 export type addCommentSchemaType = z.infer<typeof addCommentSchema>
+export type EditReportSchemaType = z.infer<typeof editReportSchema>
