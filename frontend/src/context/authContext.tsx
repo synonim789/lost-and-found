@@ -8,16 +8,16 @@ import {
 } from 'react'
 import { User } from '../types'
 
-interface UserContextType {
+interface AuthContextType {
   user: User | null
   loading: boolean
   error: string | null
   setUser: React.Dispatch<React.SetStateAction<User | null>>
 }
 
-const UserContext = createContext<UserContextType | undefined>(undefined)
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export const UserProvider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
@@ -42,15 +42,15 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     fetchUser()
   }, [])
   return (
-    <UserContext.Provider value={{ error, loading, user, setUser }}>
+    <AuthContext.Provider value={{ error, loading, user, setUser }}>
       {children}
-    </UserContext.Provider>
+    </AuthContext.Provider>
   )
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useUser = (): UserContextType => {
-  const context = useContext(UserContext)
+export const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext)
   if (!context) {
     throw new Error('useUser must be used within a UserProvider')
   }

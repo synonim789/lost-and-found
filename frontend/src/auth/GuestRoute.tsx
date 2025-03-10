@@ -1,8 +1,8 @@
 import { Navigate, Outlet } from 'react-router'
-import { useUser } from '../context/userContext'
+import { useAuth } from '../context/authContext'
 
 const GuestRoute = () => {
-  const { user } = useUser()
+  const { user } = useAuth()
   if (user) {
     return <Navigate to="/" />
   }

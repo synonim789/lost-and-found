@@ -1,11 +1,11 @@
 import ky from 'ky'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
-import { useUser } from '../context/userContext'
+import { useAuth } from '../context/authContext'
 
 const Navbar = () => {
   const navigate = useNavigate()
-  const { user, setUser } = useUser()
+  const { user, setUser } = useAuth()
 
   const logout = async () => {
     const { message } = await ky

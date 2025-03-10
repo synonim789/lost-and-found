@@ -3,13 +3,13 @@ import ky, { HTTPError } from 'ky'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
-import { useUser } from '../context/userContext'
+import { useAuth } from '../context/authContext'
 import { signUpSchema, SignUpSchemaType } from '../schemas/signUp'
 import { User } from '../types'
 
 const SignUp = () => {
   const navigate = useNavigate()
-  const { setUser } = useUser()
+  const { setUser } = useAuth()
 
   const {
     register,

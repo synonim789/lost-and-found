@@ -2,7 +2,7 @@ import ky, { HTTPError } from 'ky'
 import { CgProfile } from 'react-icons/cg'
 import { FaTrash } from 'react-icons/fa'
 import { toast } from 'react-toastify'
-import { useUser } from '../context/userContext'
+import { useAuth } from '../context/authContext'
 import { CommentType } from '../types'
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
 }
 
 const Comment = ({ comment, getReports }: Props) => {
-  const { user } = useUser()
+  const { user } = useAuth()
   const token = localStorage.getItem('authToken')
 
   const deleteComment = async () => {

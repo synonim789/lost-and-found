@@ -3,7 +3,7 @@ import { FaEdit, FaTrash } from 'react-icons/fa'
 import { Link } from 'react-router'
 import { toast } from 'react-toastify'
 import { REPORT_TYPE } from '../constants'
-import { useUser } from '../context/userContext'
+import { useAuth } from '../context/authContext'
 import { ReportType } from '../types'
 import { getImage } from '../utils'
 import Comment from './Comment'
@@ -17,8 +17,6 @@ type Props = {
 const PopupContent = ({ report, getReports }: Props) => {
   const color = REPORT_TYPE.find((r) => r.value === report.type)?.color
   const label = REPORT_TYPE.find((r) => r.value === report.type)?.label
-
-  console.log(report)
 
   const token = localStorage.getItem('authToken')
 
@@ -39,7 +37,7 @@ const PopupContent = ({ report, getReports }: Props) => {
     }
   }
 
-  const { error, loading, user } = useUser()
+  const { error, loading, user } = useAuth()
   if (loading) {
     return <p>Loading...</p>
   }
