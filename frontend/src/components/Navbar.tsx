@@ -1,11 +1,20 @@
+import ky from 'ky'
 import { Link, useNavigate } from 'react-router'
+import { toast } from 'react-toastify'
+import { useUser } from '../context/userContext'
 
 const Navbar = () => {
   const navigate = useNavigate()
-  const user = localStorage.getItem('authToken')!
+  const { user, setUser } = useUser()
 
-  const logout = () => {
-    localStorage.removeItem('authToken')
+  const logout = async () => {
+    const { message } = await ky
+      .post('http://localhost:3000/auth/logout', {
+        credentials: 'include',
+      })
+      .json<{ message: string }>()
+    setUser(null)
+    toast.success(message)
     navigate('/login')
   }
 
@@ -17,7 +26,7 @@ const Navbar = () => {
       >
         Lost and <span className="text-red-400">Found</span>
       </Link>
-      {user !== 'guestUser' ? (
+      {user?.name !== 'guestUser' ? (
         <div className="flex items-center justify-center gap-4 ">
           <Link
             to="/add"
