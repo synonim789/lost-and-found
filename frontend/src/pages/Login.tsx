@@ -3,10 +3,14 @@ import ky, { HTTPError } from 'ky'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
+import { useUser } from '../context/userContext'
 import { loginSchema, LoginSchemaType } from '../schemas/login'
+import { User } from '../types'
 
 const Login = () => {
   const navigate = useNavigate()
+
+  const { setUser } = useUser()
 
   const {
     register,
@@ -19,12 +23,14 @@ const Login = () => {
     password,
   }) => {
     try {
-      const { token } = await ky
+      const user = await ky
         .post('http://localhost:3000/auth/login', {
           json: { email, passwordRaw: password },
+          credentials: 'include',
         })
-        .json<{ token: string }>()
-      localStorage.setItem('authToken', token)
+        .json<User>()
+
+      setUser(user)
       navigate('/')
     } catch (error) {
       if (error instanceof HTTPError) {

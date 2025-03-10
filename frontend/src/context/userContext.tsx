@@ -12,6 +12,7 @@ interface UserContextType {
   user: User | null
   loading: boolean
   error: string | null
+  setUser: React.Dispatch<React.SetStateAction<User | null>>
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined)
@@ -21,40 +22,27 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
-  const token = localStorage.getItem('authToken')
-
   useEffect(() => {
     const fetchUser = async () => {
-      if (token !== 'guestUser') {
-        try {
-          const response = await ky
-            .get('http://localhost:3000/auth/me', {
-              headers: { Authorization: `Bearer ${token}` },
-            })
-            .json<User>()
+      try {
+        const response = await ky
+          .get('http://localhost:3000/auth/me', { credentials: 'include' })
+          .json<User>()
+        console.log(response)
 
-          setUser(response)
-        } catch (error) {
-          setError('Failed to fetch user')
-          console.log(error)
-        } finally {
-          setLoading(false)
-        }
-      } else {
-        setUser({
-          id: 999999,
-          email: 'guest',
-          lastName: 'guest',
-          name: 'guest',
-        })
+        setUser(response)
+      } catch (error) {
+        setError('Failed to fetch user')
+        console.log(error)
+      } finally {
         setLoading(false)
       }
     }
 
     fetchUser()
-  }, [token])
+  }, [])
   return (
-    <UserContext.Provider value={{ error, loading, user }}>
+    <UserContext.Provider value={{ error, loading, user, setUser }}>
       {children}
     </UserContext.Provider>
   )
