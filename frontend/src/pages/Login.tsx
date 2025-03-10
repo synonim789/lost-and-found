@@ -41,7 +41,7 @@ const Login = () => {
   }
 
   const loginAsGuest = () => {
-    localStorage.setItem('authToken', 'guestUser')
+    setUser({ name: 'guestUser', email: '', id: 0, lastName: '' })
     navigate('/')
   }
 
