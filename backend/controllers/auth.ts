@@ -99,3 +99,12 @@ export const getMe: RequestHandler = async (req, res) => {
     res.status(500).json({ message: 'There was an error' })
   }
 }
+
+export const logout: RequestHandler = async (req, res) => {
+  try {
+    res.clearCookie('jwt')
+    res.status(200).json({ message: 'User logged out' })
+  } catch (error) {
+    res.status(500).json({ message: 'There was an error' })
+  }
+}
