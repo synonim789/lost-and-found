@@ -15,7 +15,6 @@ const CommentForm = ({ reportId, getReports }: Props) => {
     handleSubmit,
     formState: { errors },
   } = useForm<AddCommentSchemaType>({ resolver: zodResolver(addCommentSchema) })
-  const token = localStorage.getItem('authToken')
 
   const addComment: SubmitHandler<AddCommentSchemaType> = async ({ text }) => {
     try {
@@ -24,9 +23,7 @@ const CommentForm = ({ reportId, getReports }: Props) => {
           json: {
             text,
           },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          credentials: 'include',
         })
         .json<Comment>()
       await getReports()

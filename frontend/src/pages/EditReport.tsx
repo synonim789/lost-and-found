@@ -14,7 +14,6 @@ import { ReportType } from '../types'
 const EditReport = () => {
   const { id } = useParams()
   const navigate = useNavigate()
-  const token = localStorage.getItem('authToken')
 
   const [positon, setPosition] = useState<{
     lat: number
@@ -81,9 +80,7 @@ const EditReport = () => {
       await ky
         .put(`http://localhost:3000/report/${id}`, {
           body: formData,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          credentials: 'include',
         })
         .json<ReportType>()
 

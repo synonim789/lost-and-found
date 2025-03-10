@@ -16,7 +16,6 @@ export const AddReport = () => {
     lat: number
     lng: number
   }>(center)
-  const token = localStorage.getItem('authToken')!
   const navigate = useNavigate()
 
   const {
@@ -50,9 +49,7 @@ export const AddReport = () => {
       await ky
         .post('http://localhost:3000/report', {
           body: formData,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          credentials: 'include',
         })
         .json<{ data: ReportType }>()
 

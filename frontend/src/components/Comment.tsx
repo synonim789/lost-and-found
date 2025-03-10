@@ -12,15 +12,12 @@ type Props = {
 
 const Comment = ({ comment, getReports }: Props) => {
   const { user } = useAuth()
-  const token = localStorage.getItem('authToken')
 
   const deleteComment = async () => {
     try {
       const { message } = await ky
         .delete(`http://localhost:3000/report/comment/${comment.id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          credentials: 'include',
         })
         .json<{ message: string }>()
       toast.success(message)
