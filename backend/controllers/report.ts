@@ -47,9 +47,8 @@ export const addReport: RequestHandler = async (req, res) => {
 
     const { description, latitude, longtitude, title, type } =
       req.body as AddReportSchemaType
-    const userId = req.userId
 
-    const user = await db.user.findUnique({ where: { id: userId } })
+    const user = await db.user.findUnique({ where: { id: req.user.id } })
 
     if (!user) {
       res.status(401).json({ message: 'User not allowed' })
@@ -62,7 +61,7 @@ export const addReport: RequestHandler = async (req, res) => {
         latitude: new Prisma.Decimal(latitude),
         longtitude: new Prisma.Decimal(longtitude),
         title,
-        userId,
+        userId: user.id,
         type,
         image: `/uploads/${imageFile.filename}`,
       },
@@ -85,7 +84,7 @@ export const deleteReport = async (
 ) => {
   try {
     const id = Number(req.params.id)
-    const userId = req.userId
+    const userId = req.user.id
 
     const report = await db.report.findFirst({
       where: { id },
@@ -131,7 +130,7 @@ export const deleteReport = async (
 export const addComment: RequestHandler = async (req, res) => {
   try {
     const reportId = Number(req.params.id!)
-    const userId = req.userId
+    const userId = req.user.id
 
     const report = await db.report.findFirst({ where: { id: reportId } })
 
@@ -161,7 +160,7 @@ export const addComment: RequestHandler = async (req, res) => {
 export const removeComment: RequestHandler = async (req, res) => {
   try {
     const commentId = Number(req.params.id)
-    const userId = req.userId
+    const userId = req.user.id
 
     const comment = await db.comment.findFirst({ where: { id: commentId } })
 
@@ -216,7 +215,7 @@ export const getSingleReport: RequestHandler = async (req, res) => {
 export const editReport: RequestHandler = async (req, res) => {
   try {
     const reportId = Number(req.params.id!)
-    const userId = req.userId
+    const userId = req.user.id
     const imageFile = req.file
 
     const report = await db.report.findFirst({ where: { id: reportId } })

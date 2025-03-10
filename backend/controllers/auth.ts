@@ -1,14 +1,14 @@
 import { compare, hash } from 'bcrypt'
 import type { RequestHandler } from 'express'
-import jwt from 'jsonwebtoken'
 import type { LoginBody, RegisterBody } from '../schemas/auth.js'
 import { db } from '../utils/db.js'
+import { generateToken } from '../utils/generateToken.js'
 
 export const login: RequestHandler = async (req, res) => {
   try {
     const { email, passwordRaw } = req.body as LoginBody
 
-    const user = await db.user.findFirst({
+    const user = await db.user.findUnique({
       where: {
         email,
       },
@@ -26,17 +26,20 @@ export const login: RequestHandler = async (req, res) => {
       return
     }
 
-    const token = jwt.sign({ userId: user.id }, process.env.SECRET!, {
-      expiresIn: '7d',
-    })
+    generateToken(user.id, res)
 
-    res.status(200).json({ token })
+    res.status(200).json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      lastName: user.lastName,
+    })
   } catch (error) {
     res.status(500).json({ message: 'There was an error' })
   }
 }
 
-export const addUser: RequestHandler = async (req, res) => {
+export const signUp: RequestHandler = async (req, res) => {
   try {
     const { email, lastName, name, passwordRaw } = req.body as RegisterBody
     const exists = await db.user.findFirst({
@@ -61,24 +64,25 @@ export const addUser: RequestHandler = async (req, res) => {
       },
     })
 
-    const token = jwt.sign({ userId: user.id }, process.env.SECRET!, {
-      expiresIn: '7d',
-    })
+    generateToken(user.id, res)
 
-    res.status(200).json({ token })
+    res.status(200).json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      lastName: user.lastName,
+    })
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'There was an error' })
   }
 }
 
-export const getUser: RequestHandler = async (req, res) => {
+export const getMe: RequestHandler = async (req, res) => {
   try {
-    const userId = req.userId
-
     const user = await db.user.findFirst({
       where: {
-        id: userId,
+        id: req.user.id,
       },
       omit: {
         password: true,

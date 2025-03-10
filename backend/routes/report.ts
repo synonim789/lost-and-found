@@ -14,8 +14,8 @@ import {
   addReportSchema,
   editReportSchema,
 } from '../schemas/report.js'
-import { verifyJWT } from '../utils/jwt.js'
 import { uploadReportImage } from '../utils/multer.js'
+import { protectRoute } from '../utils/protectRoute.js'
 
 const router = Router()
 
@@ -23,26 +23,26 @@ router.post(
   '/',
   uploadReportImage,
   validateData(addReportSchema),
-  verifyJWT,
+  protectRoute,
   addReport
 )
 router.get('/', getAllReports)
 router.get('/:id', getSingleReport)
-router.delete('/:id', verifyJWT, deleteReport)
+router.delete('/:id', protectRoute, deleteReport)
 router.put(
   '/:id',
   uploadReportImage,
   validateData(editReportSchema),
-  verifyJWT,
+  protectRoute,
   editReport
 )
 
 router.post(
   '/:id/comment',
   validateData(addCommentSchema),
-  verifyJWT,
+  protectRoute,
   addComment
 )
-router.delete('/comment/:id', verifyJWT, removeComment)
+router.delete('/comment/:id', protectRoute, removeComment)
 
 export default router
