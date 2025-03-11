@@ -19,7 +19,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="py-3 px-2  max-w-4xl flex justify-between mx-auto">
+    <div className="py-3 px-2 w-full  max-w-4xl flex justify-between mx-auto">
       <Link
         to="/"
         className="text-2xl font-semibold hover:scale-110 transition"
