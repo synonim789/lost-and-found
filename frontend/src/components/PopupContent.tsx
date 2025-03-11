@@ -66,9 +66,9 @@ const PopupContent = ({ report, getReports }: Props) => {
         )}
       </div>
 
-      <p className="text-sm">
+      <Link to={`/profile/${user?.id}`} className="text-sm">
         {report.user.name} {report.user.lastName}
-      </p>
+      </Link>
 
       <img src={getImage(report.image)} alt="" className="w-60 h-full" />
       <p className="text-base">{report.description}</p>
