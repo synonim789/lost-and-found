@@ -28,7 +28,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const response = await ky
           .get('http://localhost:3000/auth/me', { credentials: 'include' })
           .json<User>()
-        console.log(response)
 
         setUser(response)
       } catch (error) {
