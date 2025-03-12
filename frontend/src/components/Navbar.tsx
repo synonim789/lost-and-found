@@ -1,4 +1,5 @@
 import ky from 'ky'
+import { FiUser } from 'react-icons/fi'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 import { useAuth } from '../context/authContext'
@@ -29,11 +30,22 @@ const Navbar = () => {
       {user?.name !== 'guestUser' ? (
         <div className="flex items-center justify-center gap-4 ">
           <Link
+            to={`/profile/${user?.id}`}
+            className="flex gap-2 items-center text-lg hover:text-red-400"
+          >
+            <FiUser />
+
+            <div>
+              {user?.name} {user?.lastName}
+            </div>
+          </Link>
+          <Link
             to="/add"
             className="text-lg underline hover:text-red-400 transition"
           >
             Add Report
           </Link>
+
           <button
             className="cursor-pointer font-semibold text-lg border-2 py-1 px-2 rounded-lg"
             onClick={logout}
