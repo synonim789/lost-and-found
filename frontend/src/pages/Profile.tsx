@@ -3,6 +3,7 @@ import ky from 'ky'
 import { useParams } from 'react-router'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
+import ProfileComment from '../components/ProfileComment'
 import ProfileReport from '../components/ProfileReport'
 import { CommentType, ReportType, User } from '../types'
 
@@ -41,6 +42,13 @@ const Profile = () => {
           {data?.reports.map((report) => (
             <ProfileReport report={report} key={report.id} />
           ))}
+
+          <h3 className="text-3xl my-5">Comments:</h3>
+          <div className="flex flex-col gap-5">
+            {data?.comments.map((comment) => (
+              <ProfileComment comment={comment} key={comment.id} />
+            ))}
+          </div>
         </div>
       </div>
       <Footer />

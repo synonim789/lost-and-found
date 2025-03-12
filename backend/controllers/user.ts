@@ -10,7 +10,11 @@ export const getUser: RequestHandler = async (req, res) => {
         id: userId,
       },
       include: {
-        comments: true,
+        comments: {
+          include: {
+            user: true,
+          },
+        },
         reports: {
           include: {
             comments: {
