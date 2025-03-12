@@ -20,7 +20,7 @@ const ProfileReport = ({ report }: Props) => {
       />
       <p className="text-base">{report.description}</p>
       <p className={`${color} font-bold text-lg`}>{label}</p>
-      <div className="mb-4 flex flex-col gap-4 bg-slate-800 p-4 rounded-lg shadow-md">
+      <div className="mb-4 flex flex-col gap-4 bg-slate-800 p-4 rounded-lg shadow-md mt-5">
         {report?.comments?.map((comment) => {
           return <ProfileReportComment comment={comment} key={comment.id} />
         })}
