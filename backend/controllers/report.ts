@@ -103,6 +103,10 @@ export const deleteReport = async (
     const __filename = fileURLToPath(import.meta.url)
     const __dirname = dirname(__filename)
 
+    await db.comment.deleteMany({
+      where: { reportId: id },
+    })
+
     await db.report.delete({
       where: {
         id,
@@ -123,6 +127,8 @@ export const deleteReport = async (
 
     res.status(200).json({ message: 'Report deleted successfully' })
   } catch (error) {
+    console.log(error)
+
     res.status(400).json({ message: 'There was an error' })
   }
 }
