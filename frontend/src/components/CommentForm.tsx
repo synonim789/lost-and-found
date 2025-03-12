@@ -1,43 +1,28 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import ky, { HTTPError } from 'ky'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
+import { useAddComment } from '../hooks/useAddComment'
 import { addCommentSchema, AddCommentSchemaType } from '../schemas/addComment'
 
 type Props = {
   reportId: number
-  getReports: () => Promise<void>
 }
 
-const CommentForm = ({ reportId, getReports }: Props) => {
+const CommentForm = ({ reportId }: Props) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<AddCommentSchemaType>({ resolver: zodResolver(addCommentSchema) })
+  const { mutate } = useAddComment(reportId, 'allReports')
 
-  const addComment: SubmitHandler<AddCommentSchemaType> = async ({ text }) => {
-    try {
-      await ky
-        .post(`http://localhost:3000/report/${reportId}/comment`, {
-          json: {
-            text,
-          },
-          credentials: 'include',
-        })
-        .json<Comment>()
-      await getReports()
-      toast.success('comment added')
-    } catch (error) {
-      if (error instanceof HTTPError) {
-        const errorJson = await error.response.json<{ message: string }>()
-        toast.error(errorJson.message)
-      }
-    }
+  const onSubmit: SubmitHandler<AddCommentSchemaType> = async (data) => {
+    mutate(data)
+    reset()
   }
 
   return (
-    <form onSubmit={handleSubmit(addComment)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <textarea
         className="border-gray-200 border-2 rounded-lg h-20 w-full p-3 resize-none mb-4"
         placeholder="Write your comment here..."

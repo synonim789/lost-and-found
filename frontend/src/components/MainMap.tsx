@@ -1,6 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import ky from 'ky'
 import { Icon } from 'leaflet'
-import { useEffect, useState } from 'react'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import icon from '../assets/icon.png'
 import { center } from '../constants'
@@ -8,24 +8,23 @@ import { ReportType } from '../types'
 import PopupContent from './PopupContent'
 
 const MainMap = () => {
-  const [reports, setReports] = useState<ReportType[]>([])
-
   const customIcon = new Icon({
     iconSize: [32, 32],
     iconUrl: icon,
   })
 
-  const getReports = async () => {
+  const getReports = async (): Promise<ReportType[]> => {
     const { data } = await ky
       .get('http://localhost:3000/report')
       .json<{ data: ReportType[] }>()
-
-    setReports(data)
+    return data
   }
 
-  useEffect(() => {
-    getReports()
-  }, [])
+  const { data: reports } = useQuery({
+    queryKey: ['allReports'],
+    queryFn: getReports,
+    initialData: [],
+  })
 
   return (
     <MapContainer
@@ -46,7 +45,7 @@ const MainMap = () => {
               key={report.id}
             >
               <Popup>
-                <PopupContent report={report} getReports={getReports} />
+                <PopupContent report={report} />
               </Popup>
             </Marker>
           )
