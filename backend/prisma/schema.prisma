@@ -31,7 +31,7 @@ model Report {
   type        ReportType @default(FOUND)
   latitude    Decimal
   longtitude  Decimal
-  user        User       @relation(fields: [userId], references: [id])
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
   comments    Comment[]
 }
@@ -41,9 +41,9 @@ model Comment {
   text      String
   createdAt DateTime @default(now())
   reportId  Int
-  report    Report   @relation(fields: [reportId], references: [id])
+  report    Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum ReportType {
