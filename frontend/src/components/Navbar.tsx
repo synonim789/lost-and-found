@@ -19,6 +19,10 @@ const Navbar = () => {
     navigate('/login')
   }
 
+  const login = () => {
+    setUser(null)
+  }
+
   return (
     <div className="py-3 px-2 w-full  max-w-4xl flex justify-between mx-auto">
       <Link
@@ -57,7 +61,7 @@ const Navbar = () => {
         <Link
           to="/login"
           className="cursor-pointer font-semibold text-lg border-2 py-1 px-2 rounded-lg"
-          onClick={logout}
+          onClick={login}
         >
           Login
         </Link>
