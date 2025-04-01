@@ -56,7 +56,7 @@ enum ReportType {
 
 model Conversation {
   id             String    @id @default(uuid())
-  participantIds String[]
+  participantIds Int[]
   participants   User[]
   messagesId     String[]
   messages       Message[]
