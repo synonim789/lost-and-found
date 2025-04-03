@@ -4,6 +4,7 @@ import express from 'express'
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import authRouter from './routes/auth.js'
+import messageRouter from './routes/message.js'
 import reportRouter from './routes/report.js'
 import userRouter from './routes/user.js'
 
@@ -21,8 +22,9 @@ app.use(express.json())
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 app.use('/auth', authRouter)
-app.use('/report', reportRouter)
 app.use('/user', userRouter)
+app.use('/report', reportRouter)
+app.use('/message', messageRouter)
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`)

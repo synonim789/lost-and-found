@@ -22,7 +22,6 @@ model User {
   reports         Report[]
   comments        Comment[]
   messages        Message[]
-  conversationIds String[]
   conversations   Conversation[]
 }
 
@@ -56,9 +55,7 @@ enum ReportType {
 
 model Conversation {
   id             String    @id @default(uuid())
-  participantIds Int[]
-  participants   User[]
-  messagesId     String[]
+  participants   User[] 
   messages       Message[]
 
   createdAt DateTime @default(now())
@@ -71,7 +68,7 @@ model Message {
   senderId       Int
   sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
   conversationId String
-  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 }
