@@ -56,3 +56,28 @@ export const sendMessage: RequestHandler = async (req, res) => {
     res.status(500).json({ error: 'There was an error' })
   }
 }
+
+export const getConversations: RequestHandler = async (req, res) => {
+  try {
+    const senderId = req.user.id
+
+    const conversations = await db.conversation.findMany({
+      where: {
+        participants: { some: { id: senderId } },
+      },
+      include: {
+        messages: {
+          orderBy: { createdAt: 'desc' },
+          take: 1,
+          include: {
+            sender: true,
+          },
+        },
+      },
+    })
+
+    res.status(200).json(conversations)
+  } catch (error) {
+    res.status(500).json({ message: 'There was an error' })
+  }
+}
