@@ -81,3 +81,35 @@ export const getConversations: RequestHandler = async (req, res) => {
     res.status(500).json({ message: 'There was an error' })
   }
 }
+
+export const getMessages: RequestHandler = async (req, res) => {
+  try {
+    const { receiverId } = req.params
+    const senderId = req.user.id
+
+    const conversation = await db.conversation.findFirst({
+      where: {
+        AND: [
+          { participants: { some: { id: senderId } } },
+          { participants: { some: { id: Number(receiverId) } } },
+        ],
+      },
+      include: {
+        messages: {
+          orderBy: {
+            createdAt: 'asc',
+          },
+        },
+      },
+    })
+
+    if (!conversation) {
+      res.status(200).json([])
+      return
+    }
+
+    res.status(200).json(conversation.messages)
+  } catch (error) {
+    res.status(500).json({ message: 'There was an error' })
+  }
+}
