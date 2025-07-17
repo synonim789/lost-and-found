@@ -155,9 +155,11 @@ export const addComment: RequestHandler = async (req, res) => {
     const client = await initializeRedisClient()
     await client.del('all-reports')
 
-    const reportOwenrId = report.id
-    if (reportOwenrId !== userId) {
-      emitNotification(reportOwenrId, {
+    const reportOwnerId = report.userId
+    if (reportOwnerId !== userId) {
+      console.log('notificatin sent')
+
+      emitNotification(reportOwnerId, {
         type: 'new_comment',
         from: userId,
         reportId: report.id,

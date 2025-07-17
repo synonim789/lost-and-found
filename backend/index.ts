@@ -6,6 +6,7 @@ import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import authRouter from './routes/auth.js'
 import messageRouter from './routes/message.js'
+import notificationRouter from './routes/notifcation.js'
 import reportRouter from './routes/report.js'
 import userRouter from './routes/user.js'
 import { initSocket } from './utils/websocket.js'
@@ -27,6 +28,7 @@ app.use('/auth', authRouter)
 app.use('/user', userRouter)
 app.use('/report', reportRouter)
 app.use('/message', messageRouter)
+app.use('/notification', notificationRouter)
 
 const server = createServer(app)
 initSocket(server)

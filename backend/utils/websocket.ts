@@ -7,6 +7,7 @@ export const initSocket = (server: HTTPServer) => {
   io = new IOServer(server, {
     cors: {
       origin: '*',
+      credentials: true,
     },
   })
 
