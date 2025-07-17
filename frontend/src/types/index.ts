@@ -31,3 +31,11 @@ export type User = {
   email: string
   lastName: string
 }
+
+export type NotificationType = {
+  id: number
+  type: string
+  content: string
+  isRead: boolean
+  createdAt: string
+}

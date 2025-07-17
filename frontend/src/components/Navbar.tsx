@@ -3,6 +3,8 @@ import { FiUser } from 'react-icons/fi'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 import { useAuth } from '../context/authContext'
+import MessagesMenu from './MessagesMenu'
+import NotificationMenu from './NotificationMenu'
 
 const Navbar = () => {
   const navigate = useNavigate()
@@ -31,8 +33,10 @@ const Navbar = () => {
       >
         Lost and <span className="text-red-400">Found</span>
       </Link>
-      {user?.name !== 'guestUser' ? (
+      {user?.id && user?.name !== 'guestUser' ? (
         <div className="flex items-center justify-center gap-4 ">
+          <MessagesMenu />
+          <NotificationMenu userId={user.id} />
           <Link
             to={`/profile/${user?.id}`}
             className="flex gap-2 items-center text-lg hover:text-red-400"
