@@ -14,15 +14,17 @@ datasource db {
 }
 
 model User {
-  id              Int            @id @default(autoincrement())
-  email           String         @unique
-  password        String
-  name            String
-  lastName        String
-  reports         Report[]
-  comments        Comment[]
-  messages        Message[]
-  conversations   Conversation[]
+  id                Int            @id @default(autoincrement())
+  email             String         @unique
+  password          String
+  name              String
+  lastName          String
+  reports           Report[]
+  comments          Comment[]
+  messages          Message[]
+  conversations     Conversation[]
+  notifications     Notification[]
+  sentNotifications Notification[] @relation("FromUser")
 }
 
 model Report {
@@ -54,9 +56,9 @@ enum ReportType {
 }
 
 model Conversation {
-  id             String    @id @default(uuid())
-  participants   User[] 
-  messages       Message[]
+  id           String    @id @default(uuid())
+  participants User[]
+  messages     Message[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -69,6 +71,19 @@ model Message {
   sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
   conversationId String
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id         String  @id @default(uuid())
+  type       String
+  content    String
+  isRead     Boolean @default(false)
+  userId     Int
+  user       User    @relation(fields: [userId], references: [id])
+  fromUserId Int
+  fromUser   User    @relation("FromUser", fields: [fromUserId], references: [id])
 
   createdAt DateTime @default(now())
 }

@@ -3,13 +3,14 @@ import type { Request, RequestHandler, Response } from 'express'
 import fs from 'fs'
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
-import type {
-  addCommentSchemaType,
-  AddReportSchemaType,
-  EditReportSchemaType,
+import {
+  type addCommentSchemaType,
+  type AddReportSchemaType,
+  type EditReportSchemaType,
 } from '../schemas/report.js'
 import { initializeRedisClient } from '../utils/client.js'
 import { db } from '../utils/db.js'
+import { emitNotification } from '../utils/websocket.js'
 
 export const getAllReports: RequestHandler = async (req, res) => {
   try {
@@ -138,6 +139,7 @@ export const addComment: RequestHandler = async (req, res) => {
 
     if (!report) {
       res.status(404).json({ message: 'Report Not Found' })
+      return
     }
 
     const { text } = req.body as addCommentSchemaType
@@ -152,6 +154,25 @@ export const addComment: RequestHandler = async (req, res) => {
 
     const client = await initializeRedisClient()
     await client.del('all-reports')
+
+    const reportOwenrId = report.id
+    if (reportOwenrId !== userId) {
+      emitNotification(reportOwenrId, {
+        type: 'new_comment',
+        from: userId,
+        reportId: report.id,
+        commentText: comment.text,
+      })
+
+      await db.notification.create({
+        data: {
+          type: 'new_comment',
+          content: `Someone commented on your report: ${text.slice(0, 100)}`,
+          userId: report?.userId,
+          fromUserId: userId,
+        },
+      })
+    }
 
     res.status(200).json(comment)
   } catch (error) {

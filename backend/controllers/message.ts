@@ -1,6 +1,7 @@
 import type { RequestHandler } from 'express'
 import type { SendMessageBody } from '../schemas/message.js'
 import { db } from '../utils/db.js'
+import { emitNotification } from '../utils/websocket.js'
 
 export const sendMessage: RequestHandler = async (req, res) => {
   try {
@@ -12,7 +13,7 @@ export const sendMessage: RequestHandler = async (req, res) => {
       where: { id: Number(receiverId) },
     })
 
-    if (!receiver) {
+    if (!receiver || !receiverId) {
       res.status(404).json({
         message: "User that you want to send message to doesn't exist",
       })
@@ -48,6 +49,22 @@ export const sendMessage: RequestHandler = async (req, res) => {
         content,
         senderId,
         conversationId: conversation.id,
+      },
+    })
+
+    emitNotification(Number(receiverId), {
+      type: 'new_message',
+      from: senderId,
+      content: message.content,
+      conversationId: conversation.id,
+    })
+
+    await db.notification.create({
+      data: {
+        type: 'new_message',
+        content: `You received a new message from ${req.user.name}`,
+        userId: Number(receiverId),
+        fromUserId: senderId,
       },
     })
 
