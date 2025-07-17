@@ -12,6 +12,10 @@ export const initSocket = (server: HTTPServer) => {
 
   io.on('connection', (socket) => {
     console.log('User connected')
+
+    socket.on('join', (userId: number) => {
+      socket.join(`user:${userId}`)
+    })
   })
 }
 
