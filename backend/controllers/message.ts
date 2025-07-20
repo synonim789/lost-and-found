@@ -116,6 +116,7 @@ export const getMessages: RequestHandler = async (req, res) => {
           orderBy: {
             createdAt: 'asc',
           },
+          include: { sender: { omit: { password: true } } },
         },
       },
     })
