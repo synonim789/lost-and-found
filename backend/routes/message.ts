@@ -11,9 +11,14 @@ import { protectRoute } from '../utils/protectRoute.js'
 
 const router = Router()
 
-router.post('/:id', validateData(sendMessageSchema), protectRoute, sendMessage)
+router.post(
+  '/:conversationId',
+  validateData(sendMessageSchema),
+  protectRoute,
+  sendMessage
+)
 router.get('/conversation', protectRoute, getConversations)
-router.get('/:receiverId', protectRoute, getMessages)
+router.get('/:conversationId', protectRoute, getMessages)
 router.get('/conversation/:receiverId', protectRoute, getConversationId)
 
 export default router

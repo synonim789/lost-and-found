@@ -5,43 +5,28 @@ import { emitNotification } from '../utils/websocket.js'
 
 export const sendMessage: RequestHandler = async (req, res) => {
   try {
-    const { id: receiverId } = req.params
+    const { id: conversationId } = req.params
     const { content } = req.body as SendMessageBody
     const { id: senderId } = req.user
 
-    const receiver = await db.user.findUnique({
-      where: { id: Number(receiverId) },
-    })
-
-    if (!receiver || !receiverId) {
-      res.status(404).json({
-        message: "User that you want to send message to doesn't exist",
-      })
-      return
-    }
-
-    if (Number(receiverId) === senderId) {
-      res.status(400).json({ message: "You can't send message to yourself" })
-      return
-    }
-
     let conversation = await db.conversation.findFirst({
       where: {
-        AND: [
-          { participants: { some: { id: senderId } } },
-          { participants: { some: { id: Number(receiverId) } } },
-        ],
+        id: conversationId,
+      },
+      include: {
+        participants: {
+          where: {
+            id: {
+              not: senderId,
+            },
+          },
+        },
       },
     })
 
     if (!conversation) {
-      conversation = await db.conversation.create({
-        data: {
-          participants: {
-            connect: [{ id: senderId }, { id: Number(receiverId) }],
-          },
-        },
-      })
+      res.status(404).json({ message: 'Conversation not found' })
+      return
     }
 
     const message = await db.message.create({
@@ -52,7 +37,7 @@ export const sendMessage: RequestHandler = async (req, res) => {
       },
     })
 
-    emitNotification(Number(receiverId), {
+    emitNotification(Number(conversation.participants[0]?.id), {
       type: 'new_message',
       from: senderId,
       content: message.content,
@@ -63,13 +48,15 @@ export const sendMessage: RequestHandler = async (req, res) => {
       data: {
         type: 'new_message',
         content: `You received a new message from ${req.user.name}`,
-        userId: Number(receiverId),
+        userId: Number(conversation.participants[0]?.id),
         fromUserId: senderId,
       },
     })
 
     res.status(201).json(message)
   } catch (error) {
+    console.log(error)
+
     res.status(500).json({ error: 'There was an error' })
   }
 }
@@ -83,6 +70,11 @@ export const getConversations: RequestHandler = async (req, res) => {
         participants: { some: { id: senderId } },
       },
       include: {
+        participants: {
+          omit: {
+            password: true,
+          },
+        },
         messages: {
           orderBy: { createdAt: 'desc' },
           take: 1,
@@ -93,7 +85,7 @@ export const getConversations: RequestHandler = async (req, res) => {
       },
     })
 
-    res.status(200).json(conversations)
+    res.status(200).json({ data: conversations })
   } catch (error) {
     res.status(500).json({ message: 'There was an error' })
   }
@@ -101,15 +93,11 @@ export const getConversations: RequestHandler = async (req, res) => {
 
 export const getMessages: RequestHandler = async (req, res) => {
   try {
-    const { receiverId } = req.params
-    const senderId = req.user.id
+    const { conversationId } = req.params
 
     const conversation = await db.conversation.findFirst({
       where: {
-        AND: [
-          { participants: { some: { id: senderId } } },
-          { participants: { some: { id: Number(receiverId) } } },
-        ],
+        id: conversationId,
       },
       include: {
         messages: {
@@ -126,8 +114,10 @@ export const getMessages: RequestHandler = async (req, res) => {
       return
     }
 
-    res.status(200).json(conversation.messages)
+    res.status(200).json({ data: conversation.messages })
   } catch (error) {
+    console.log(error)
+
     res.status(500).json({ message: 'There was an error' })
   }
 }

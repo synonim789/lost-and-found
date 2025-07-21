@@ -39,3 +39,20 @@ export type NotificationType = {
   isRead: boolean
   createdAt: string
 }
+
+export type Message = {
+  id: string
+  content: string
+  senderId: number
+  conversationId: string
+  createdAt: Date
+  sender: User
+}
+
+export type Conversation = {
+  id: string
+  createdAt: Date
+  updatedAt: Date
+  participants: User[]
+  messages: Message[]
+}
