@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import ky from 'ky'
 import { FaEdit, FaTrash } from 'react-icons/fa'
-import { Link } from 'react-router'
+import { MdOutlineMessage } from 'react-icons/md'
+import { Link, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 import { REPORT_TYPE } from '../constants'
 import { useAuth } from '../context/authContext'
@@ -15,6 +16,7 @@ type Props = {
 }
 
 const PopupContent = ({ report }: Props) => {
+  const navigate = useNavigate()
   const queryClient = useQueryClient()
   const color = REPORT_TYPE.find((r) => r.value === report.type)?.color
   const label = REPORT_TYPE.find((r) => r.value === report.type)?.label
@@ -26,6 +28,15 @@ const PopupContent = ({ report }: Props) => {
       })
       .json<{ message: string }>()
     return message
+  }
+
+  const navigateToConversation = async () => {
+    const { id } = await ky
+      .get(`http://localhost:3000/message/conversation/${report.userId}`, {
+        credentials: 'include',
+      })
+      .json<{ id: string }>()
+    navigate(`/messages/${id}`)
   }
 
   const mutation = useMutation({
@@ -66,10 +77,17 @@ const PopupContent = ({ report }: Props) => {
           </div>
         )}
       </div>
-
-      <Link to={`/profile/${user?.id}`} className="text-sm">
-        {report.user.name} {report.user.lastName}
-      </Link>
+      <div className="flex gap-2 items-center">
+        <Link to={`/profile/${report.userId}`} className="text-sm">
+          {report.user.name} {report.user.lastName}
+        </Link>
+        {report.user.id !== user?.id && (
+          <MdOutlineMessage
+            className="text-lg cursor-pointer hover:text-blue-400"
+            onClick={navigateToConversation}
+          />
+        )}
+      </div>
 
       <img src={getImage(report.image)} alt="" className="w-60 h-full" />
       <p className="text-base">{report.description}</p>
