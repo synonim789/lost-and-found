@@ -1,7 +1,7 @@
 import type { RequestHandler } from 'express'
 import type { SendMessageBody } from '../schemas/message.js'
 import { db } from '../utils/db.js'
-import { emitNotification } from '../utils/websocket.js'
+import { emitNewMessage, emitNotification } from '../utils/websocket.js'
 
 export const sendMessage: RequestHandler = async (req, res) => {
   try {
@@ -35,7 +35,16 @@ export const sendMessage: RequestHandler = async (req, res) => {
         senderId,
         conversationId: conversation.id,
       },
+      include: {
+        sender: {
+          omit: {
+            password: true,
+          },
+        },
+      },
     })
+
+    emitNewMessage(conversation.id, message)
 
     emitNotification(Number(conversation.participants[0]?.id), {
       type: 'new_message',

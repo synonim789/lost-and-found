@@ -1,28 +1,13 @@
-import { useQuery } from '@tanstack/react-query'
-import ky from 'ky'
 import { CgProfile } from 'react-icons/cg'
 import { Link } from 'react-router'
-import { Conversation } from '../types'
+import useConversations from '../hooks/useConversations'
 
 type Props = {
   userId: number
 }
 
 const ChatSidebar = ({ userId }: Props) => {
-  const getConversations = async (): Promise<Conversation[]> => {
-    const { data } = await ky
-      .get('http://localhost:3000/message/conversation', {
-        credentials: 'include',
-      })
-      .json<{ data: Conversation[] }>()
-    return data
-  }
-
-  const { data: conversations } = useQuery({
-    queryKey: ['conversations'],
-    queryFn: getConversations,
-    initialData: [],
-  })
+  const { conversations } = useConversations()
 
   return (
     <div className="w-fit">

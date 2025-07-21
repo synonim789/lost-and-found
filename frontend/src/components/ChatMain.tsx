@@ -1,32 +1,24 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery } from '@tanstack/react-query'
-import ky from 'ky'
+import { useEffect, useRef } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useParams } from 'react-router'
 import { useAuth } from '../context/authContext'
+import useMessage from '../hooks/useMessage'
 import { useSendMessage } from '../hooks/useSendMessage'
 import { sendMessageSchema, SendMessageSchemType } from '../schemas/sendMessage'
-import { Message } from '../types'
 
 const ChatMain = () => {
   const { id } = useParams()
-
-  const getMessages = async (): Promise<Message[]> => {
-    const { data } = await ky
-      .get(`http://localhost:3000/message/${id}`, {
-        credentials: 'include',
-      })
-      .json<{ data: Message[] }>()
-    return data
-  }
-
-  const { data: messages } = useQuery({
-    queryKey: ['messages'],
-    queryFn: getMessages,
-    initialData: [],
-  })
-
   const { user } = useAuth()
+  const { messages } = useMessage(id)
+
+  const messageEndRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [messages])
 
   const {
     register,
@@ -37,7 +29,7 @@ const ChatMain = () => {
     resolver: zodResolver(sendMessageSchema),
   })
 
-  const { mutate } = useSendMessage(Number(id))
+  const { mutate } = useSendMessage(id)
 
   const onSubmit: SubmitHandler<SendMessageSchemType> = async (data) => {
     mutate(data)
@@ -61,13 +53,14 @@ const ChatMain = () => {
             </div>
             <div
               className={`${' p-2 rounded-lg'} ${
-                m.senderId === 1 ? 'bg-slate-500' : 'bg-slate-900'
+                m.senderId === user.id ? 'bg-slate-500' : 'bg-slate-900'
               }`}
             >
               {m.content}
             </div>
           </div>
         ))}
+        <div ref={messageEndRef}></div>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex gap-5">

@@ -17,11 +17,21 @@ export const initSocket = (server: HTTPServer) => {
     socket.on('join', (userId: number) => {
       socket.join(`user:${userId}`)
     })
+
+    socket.on('join_conversation', (conversationId: string) => {
+      socket.join(`conversation:${conversationId}`)
+    })
   })
 }
 
 export const emitNotification = (userId: number, payload: any) => {
   if (io) {
     io.to(`user:${userId}`).emit('notification', payload)
+  }
+}
+
+export const emitNewMessage = (conversationId: string, message: any) => {
+  if (io) {
+    io.to(`conversation:${conversationId}`).emit('new_message', message)
   }
 }
