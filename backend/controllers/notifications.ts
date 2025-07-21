@@ -15,7 +15,10 @@ export const getNotifications: RequestHandler = async (req, res) => {
   }
 }
 
-export const markNotificationRead: RequestHandler = async (req, res) => {
+export const markMessageNotificationAsRead: RequestHandler = async (
+  req,
+  res
+) => {
   try {
     const { id } = req.params
 
@@ -29,6 +32,29 @@ export const markNotificationRead: RequestHandler = async (req, res) => {
     })
 
     res.status(200).json(notification)
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to mark notifcation as read' })
+  }
+}
+
+export const markCommentNotificationsAsRead: RequestHandler = async (
+  req,
+  res
+) => {
+  try {
+    const { id: userId } = req.user
+
+    const notifications = await db.notification.updateMany({
+      where: {
+        userId: Number(userId),
+        type: 'new_comment',
+      },
+      data: {
+        isRead: true,
+      },
+    })
+
+    res.status(200).json({ data: notifications })
   } catch (error) {
     res.status(500).json({ message: 'Failed to mark notifcation as read' })
   }

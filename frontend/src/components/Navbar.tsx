@@ -1,4 +1,5 @@
 import ky from 'ky'
+import { FaRocketchat } from 'react-icons/fa'
 import { FiUser } from 'react-icons/fi'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
@@ -35,8 +36,16 @@ const Navbar = () => {
       </Link>
       {user?.id && user?.name !== 'guestUser' ? (
         <div className="flex items-center justify-center gap-4 ">
-          <MessagesMenu />
+          <MessagesMenu userId={user.id} />
           <NotificationMenu userId={user.id} />
+          <Link
+            className="flex gap-2 items-center text-lg hover:text-red-400 cursor-pointer"
+            to="/messages"
+          >
+            <FaRocketchat />
+            <div>Chat</div>
+          </Link>
+
           <Link
             to={`/profile/${user?.id}`}
             className="flex gap-2 items-center text-lg hover:text-red-400"

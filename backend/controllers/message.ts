@@ -131,7 +131,7 @@ export const getMessages: RequestHandler = async (req, res) => {
   }
 }
 
-export const getConversationId: RequestHandler = async (req, res) => {
+export const getConversationById: RequestHandler = async (req, res) => {
   try {
     const { receiverId } = req.params
     const senderId = req.user.id
@@ -159,6 +159,43 @@ export const getConversationId: RequestHandler = async (req, res) => {
     }
 
     res.status(200).json({ id: conversation.id })
+  } catch (error) {
+    res.status(500).json({ message: 'There was an error' })
+  }
+}
+
+export const getConversationByUsers: RequestHandler = async (req, res) => {
+  try {
+    const { receiverId } = req.params
+    const { id: userId } = req.user
+
+    const conversation = await db.conversation.findFirst({
+      where: {
+        participants: {
+          some: {
+            id: userId,
+          },
+        },
+        AND: {
+          participants: {
+            some: {
+              id: Number(receiverId),
+            },
+          },
+        },
+      },
+      include: {
+        participants: true,
+        messages: true,
+      },
+    })
+
+    if (!conversation) {
+      res.status(404).json({ message: 'Conversation not found' })
+      return
+    }
+
+    res.status(200).json({ data: conversation })
   } catch (error) {
     res.status(500).json({ message: 'There was an error' })
   }

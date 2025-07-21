@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
-  getConversationId,
+  getConversationById,
+  getConversationByUsers,
   getConversations,
   getMessages,
   sendMessage,
@@ -17,8 +18,14 @@ router.post(
   protectRoute,
   sendMessage
 )
+
+router.get(
+  '/conversation/user/:receiverId',
+  protectRoute,
+  getConversationByUsers
+)
 router.get('/conversation', protectRoute, getConversations)
 router.get('/:conversationId', protectRoute, getMessages)
-router.get('/conversation/:receiverId', protectRoute, getConversationId)
+router.get('/conversation/:conversationId', protectRoute, getConversationById)
 
 export default router

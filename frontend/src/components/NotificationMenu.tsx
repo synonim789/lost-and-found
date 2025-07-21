@@ -1,3 +1,4 @@
+import ky from 'ky'
 import { useEffect, useRef, useState } from 'react'
 import { FaBell, FaCommentAlt } from 'react-icons/fa'
 import { useNotifications } from '../hooks/useNotifications'
@@ -25,13 +26,31 @@ const NotificationMenu = ({ userId }: Props) => {
     return () => document.body.removeEventListener('click', closeDropdown)
   }, [])
 
+  const setNotificationAsRead = async () => {
+    await ky.put('http://localhost:3000/notification/comment', {
+      credentials: 'include',
+    })
+  }
+
+  const readedNotifications = notifications
+    .filter((n) => n.type === 'new_comment')
+    .filter((n) => n.isRead === false)
+
   return (
     <div className="relative flex items-center" ref={menuRef}>
       <button
-        className="cursor-pointer hover:opacity-70"
-        onClick={() => setOpen(!open)}
+        className="cursor-pointer hover:opacity-70 relative"
+        onClick={() => {
+          setOpen(!open)
+          setNotificationAsRead()
+        }}
       >
         <FaBell />
+        {readedNotifications.length > 0 && (
+          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+            {readedNotifications.length}
+          </span>
+        )}
       </button>
       {open && (
         <Dropdown title="Notifications">

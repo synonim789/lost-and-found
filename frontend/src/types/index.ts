@@ -38,6 +38,7 @@ export type NotificationType = {
   content: string
   isRead: boolean
   createdAt: string
+  fromUserId: number
 }
 
 export type Message = {

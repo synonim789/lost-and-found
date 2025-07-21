@@ -1,13 +1,15 @@
 import { Router } from 'express'
 import {
   getNotifications,
-  markNotificationRead,
+  markCommentNotificationsAsRead,
+  markMessageNotificationAsRead,
 } from '../controllers/notifications.js'
 import { protectRoute } from '../utils/protectRoute.js'
 
 const router = Router()
 
 router.get('/', protectRoute, getNotifications)
-router.put('/:id', protectRoute, markNotificationRead)
+router.put('/message/:id', protectRoute, markMessageNotificationAsRead)
+router.put('/comment', protectRoute, markCommentNotificationsAsRead)
 
 export default router
