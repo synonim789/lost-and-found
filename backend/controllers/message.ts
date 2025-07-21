@@ -131,3 +131,36 @@ export const getMessages: RequestHandler = async (req, res) => {
     res.status(500).json({ message: 'There was an error' })
   }
 }
+
+export const getConversationId: RequestHandler = async (req, res) => {
+  try {
+    const { receiverId } = req.params
+    const senderId = req.user.id
+
+    let conversation = await db.conversation.findFirst({
+      where: {
+        participants: {
+          every: {
+            id: {
+              in: [senderId, Number(receiverId)],
+            },
+          },
+        },
+      },
+    })
+
+    if (!conversation) {
+      conversation = await db.conversation.create({
+        data: {
+          participants: {
+            connect: [{ id: senderId }, { id: Number(receiverId) }],
+          },
+        },
+      })
+    }
+
+    res.status(200).json({ id: conversation.id })
+  } catch (error) {
+    res.status(500).json({ message: 'There was an error' })
+  }
+}
