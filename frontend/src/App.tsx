@@ -16,8 +16,8 @@ import UpdateUser from './pages/UpdateUser'
 const App = () => {
   return (
     <Routes>
+      <Route path="/" element={<Home />} />
       <Route element={<PrivateRoute />}>
-        <Route path="/" element={<Home />} />
         <Route path="/add" element={<AddReport />} />
         <Route path="/messages" element={<Messages />}>
           <Route index element={<ChooseConversation />} />
