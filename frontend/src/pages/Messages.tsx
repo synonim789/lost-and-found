@@ -14,8 +14,8 @@ const Messages = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className=" mx-auto max-w-5xl w-full grow mt-5">
-        <div className="flex gap-5 bg-slate-700 rounded-xl p-3 min-h-[500px]">
+      <div className=" mx-auto max-w-5xl w-full grow mt-5 px-3">
+        <div className="flex flex-col md:flex-row gap-5 bg-slate-700 rounded-xl p-3 min-h-[500px]">
           <ChatSidebar userId={user.id} />
           <div className="w-px bg-slate-500 self-stretch" />
           <div className="flex-1 flex items-end justify-center">

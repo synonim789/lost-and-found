@@ -10,7 +10,7 @@ const ChatSidebar = ({ userId }: Props) => {
   const { conversations } = useConversations()
 
   return (
-    <div className="w-fit">
+    <div className="w-full md:w-64">
       <h2 className="mb-2 font-bold text-xl">Conversations</h2>
       <div className="flex flex-col gap-4 w-full">
         {conversations.length > 0 &&
@@ -34,7 +34,7 @@ const ChatSidebar = ({ userId }: Props) => {
                       </div>
                     </div>
                   ))}
-                <div className="text-sm text-gray-400 w-full">
+                <div className="hidden sm:block text-sm text-gray-400 w-full">
                   {c.messages.map((m) =>
                     m.senderId === userId
                       ? `You: ${m.content}`

@@ -42,7 +42,7 @@ const ChatMain = () => {
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <div className="flex flex-col gap-4 overflow-y-auto max-h-[500px] p-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-900 [&::-webkit-scrollbar-thumb]:rounded-lg">
+      <div className="flex flex-col gap-4 overflow-y-auto max-h-[60vh] md:max-h-[70vh] p-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-900 [&::-webkit-scrollbar-thumb]:rounded-lg">
         {messages.map((m) => (
           <div
             className={` ${m.senderId === user.id ? 'self-end' : 'self-start'}`}
@@ -62,8 +62,10 @@ const ChatMain = () => {
         ))}
         <div ref={messageEndRef}></div>
       </div>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="flex gap-5">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col sm:flex-row gap-5"
+      >
         <input
           type="text"
           className="bg-slate-800 w-full rounded-lg p-1"
