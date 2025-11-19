@@ -26,6 +26,6 @@ router.get(
 )
 router.get('/conversation', protectRoute, getConversations)
 router.get('/:conversationId', protectRoute, getMessages)
-router.get('/conversation/:conversationId', protectRoute, getConversationById)
+router.get('/conversation/:receiverId', protectRoute, getConversationById)
 
 export default router
