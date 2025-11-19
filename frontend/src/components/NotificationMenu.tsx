@@ -54,6 +54,9 @@ const NotificationMenu = ({ userId }: Props) => {
       </button>
       {open && (
         <Dropdown title="Notifications">
+          {notifications.length === 0 && (
+            <p className="mt-2 p-1 font-semibold">No Notifications Yet</p>
+          )}
           {notifications
             .filter((n) => n.type === 'new_comment')
             .slice(0, 7)
