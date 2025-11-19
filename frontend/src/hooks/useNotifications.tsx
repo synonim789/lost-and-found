@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { NotificationType } from '../types'
 import { socket } from '../utils/socket'
 
-export const useNotifications = (userId: number) => {
+export const useNotifications = (userId: number | undefined) => {
   const [notifications, setNotifications] = useState<NotificationType[]>([])
   const fetchNotifications = async () => {
     const data = await ky

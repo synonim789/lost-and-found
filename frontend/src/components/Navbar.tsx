@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 import { useAuth } from '../context/authContext'
 import MessagesMenu from './MessagesMenu'
+import MobileNavbar from './MobileNavbar'
 import NotificationMenu from './NotificationMenu'
 
 const Navbar = () => {
@@ -120,44 +121,7 @@ const Navbar = () => {
       </div>
 
       {open && user?.id && user?.name !== 'guestUser' && (
-        <div className="md:hidden mt-4 flex flex-col items-center gap-5 pb-3 animate-fadeIn">
-          <div className="flex items-center gap-5">
-            <MessagesMenu userId={user.id} />
-            <NotificationMenu userId={user.id} />
-          </div>
-
-          <Link
-            className="flex gap-2 items-center text-lg hover:text-red-400 transition"
-            to="/messages"
-          >
-            <FaRocketchat />
-            <span>Chat</span>
-          </Link>
-
-          <Link
-            to={`/profile/${user.id}`}
-            className="flex gap-2 items-center text-lg hover:text-red-400 transition"
-          >
-            <FiUser />
-            <span>
-              {user.name} {user.lastName}
-            </span>
-          </Link>
-
-          <Link
-            to="/add"
-            className="text-lg underline hover:text-red-400 transition"
-          >
-            Add Report
-          </Link>
-
-          <button
-            onClick={logout}
-            className="font-semibold text-lg border-2 py-1 px-3 rounded-lg hover:bg-gray-100 transition"
-          >
-            Logout
-          </button>
-        </div>
+        <MobileNavbar user={user} logout={logout} />
       )}
     </div>
   )
