@@ -38,8 +38,6 @@ const MessagesMenu = ({ userId }: Props) => {
     ).values()
   ).slice(0, 7)
 
-  console.log(notifications)
-
   const readedNotifications = notifications.filter((n) => n.isRead === false)
 
   return (
@@ -57,6 +55,9 @@ const MessagesMenu = ({ userId }: Props) => {
       </button>
       {open && (
         <Dropdown title="Messages">
+          {notifications.length === 0 && (
+            <p className="mt-2 p-1 font-semibold">No Messages Yet</p>
+          )}
           {notifications.map((n) => {
             const navigateToConversation = async () => {
               const { data } = await ky
