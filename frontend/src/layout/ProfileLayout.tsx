@@ -32,14 +32,14 @@ const ProfileLayout = () => {
     setUser(null)
   }
 
-  const { data } = useQuery({ queryKey: ['userProfile'], queryFn: getUser })
+  const { data } = useQuery({ queryKey: ['userProfile', id], queryFn: getUser })
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <div className="max-w-4xl mx-auto w-full grow mt-5">
-        <div className="flex justify-between">
+        <div className="flex flex-col lg:flex-row items-center gap-5 lg:justify-between">
           <h1 className="text-5xl capitalize">
-            {data?.name} {data?.lastName}
+            {`${data?.name} ${data?.lastName}`}
           </h1>
           {user?.id === data?.id && (
             <div className="flex gap-4">

@@ -23,10 +23,10 @@ const Profile = () => {
     return data
   }
 
-  const { data } = useQuery({ queryKey: ['userProfile'], queryFn: getUser })
+  const { data } = useQuery({ queryKey: ['userProfile', id], queryFn: getUser })
 
   return (
-    <div>
+    <div className="p-5">
       <h3 className="text-3xl my-5 text-center font-bold">Reports</h3>
       {data?.reports.length === 0 && (
         <p className="text-center">This user has not added any reports</p>

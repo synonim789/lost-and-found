@@ -52,13 +52,13 @@ const UpdateUser = () => {
   }
 
   return (
-    <div className="flex flex-col items-center">
-      <h3 className="text-3xl my-5 font-bold">Update</h3>
+    <div className="flex flex-col">
+      <h3 className="text-3xl my-5 font-bold text-center">Update</h3>
       <form
-        className="flex items-center flex-col"
+        className="flex items-center flex-col p-5"
         onSubmit={handleSubmit(submitHandler)}
       >
-        <div className="flex gap-10 w-120">
+        <div className="flex flex-col lg:flex-row gap-5 lg:gap-10 w-full lg:w-120">
           <div className="w-full">
             <label htmlFor="name">Name:</label>
             <input
@@ -86,7 +86,7 @@ const UpdateUser = () => {
         </div>
         <button
           type="submit"
-          className="bg-red-700 text py-2  px-4 rounded-xl mt-5 cursor-pointer hover:bg-red-600 transition w-120"
+          className="bg-red-700 text py-2 px-4 rounded-xl mt-8 lg:mt-5 cursor-pointer hover:bg-red-600 transitio w-full n lg:w-120"
         >
           Update User
         </button>
