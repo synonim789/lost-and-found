@@ -41,7 +41,7 @@ const AddReportMap = ({ position, setPosition }: Props) => {
     <MapContainer
       center={center}
       zoom={13}
-      scrollWheelZoom={true}
+      scrollWheelZoom={false}
       className="md:w-1/2"
     >
       <TileLayer
