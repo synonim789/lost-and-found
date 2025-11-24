@@ -47,14 +47,12 @@ const PopupContent = ({ report }: Props) => {
     },
   })
 
-  const { error, loading, user } = useAuth()
+  const { loading, user } = useAuth()
   if (loading) {
     return <p>Loading...</p>
   }
 
-  if (error) {
-    return <p>{error}</p>
-  }
+  console.log(user)
 
   return (
     <div className="w-full">
@@ -81,22 +79,23 @@ const PopupContent = ({ report }: Props) => {
         <Link to={`/profile/${report.userId}`} className="text-sm">
           {report.user.name} {report.user.lastName}
         </Link>
-        {report.user.id !== user?.id && (
+        {report.user.id !== user?.id && user && (
           <MdOutlineMessage
             className="text-lg cursor-pointer hover:text-blue-400"
             onClick={navigateToConversation}
           />
         )}
       </div>
-
-      <img src={getImage(report.image)} alt="" className="w-60 h-full" />
-      <p className="text-base">{report.description}</p>
-      <p className={`${color} font-bold text-lg`}>{label}</p>
-      <div className="mb-4 flex flex-col gap-4 bg-gray-50 p-4 rounded-lg shadow-md">
-        {report.comments.map((comment) => (
-          <Comment comment={comment} key={comment.id} />
-        ))}
-        <CommentForm reportId={report.id} />
+      <div className="flex flex-col gap-3">
+        <img src={getImage(report.image)} className="w-60 h-full" />
+        <p className="text-base">{report.description}</p>
+        <p className={`${color} font-bold text-lg`}>{label}</p>
+        <div className="mb-4 flex flex-col gap-4 bg-[#2b2b2b] p-4 rounded-lg shadow-md">
+          {report.comments.map((comment) => (
+            <Comment comment={comment} key={comment.id} />
+          ))}
+          <CommentForm reportId={report.id} />
+        </div>
       </div>
     </div>
   )

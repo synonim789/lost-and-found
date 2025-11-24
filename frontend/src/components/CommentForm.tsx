@@ -24,7 +24,7 @@ const CommentForm = ({ reportId }: Props) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <textarea
-        className="border-gray-200 border-2 rounded-lg h-20 w-full p-3 resize-none mb-4"
+        className="border-gray-600 border-2 rounded-lg h-20 w-full p-3 resize-none mb-4"
         placeholder="Write your comment here..."
         {...register('text')}
       />

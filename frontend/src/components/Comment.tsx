@@ -35,7 +35,7 @@ const Comment = ({ comment }: Props) => {
     <div>
       <div className="flex gap-3 items-center">
         <CgProfile className="text-3xl text-blue-600" />
-        <p className="text-base font-semibold text-gray-800">
+        <p className="text-base font-semibold text-gray-500">
           {comment.user.name} {comment.user.lastName}
         </p>
         {user?.id === comment.userId && (
@@ -48,9 +48,9 @@ const Comment = ({ comment }: Props) => {
         )}
       </div>
       <div className="mt-2">
-        <p className="text-gray-700">{comment.text}</p>
+        <p className="text-gray-300">{comment.text}</p>
       </div>
-      <div className="mt-4 border-t border-gray-200"></div>
+      <div className="mt-4 border-t border-gray-600"></div>
     </div>
   )
 }

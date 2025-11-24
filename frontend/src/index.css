@@ -7,3 +7,12 @@
 .leaflet-popup-content p {
   margin: 0;
 }
+
+.leaflet-popup-content-wrapper {
+  background: #111111;
+  color: white;
+}
+
+.leaflet-popup-tip {
+  background: #2b2b2b;
+}
