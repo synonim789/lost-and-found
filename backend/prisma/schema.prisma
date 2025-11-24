@@ -83,7 +83,7 @@ model Notification {
   userId     Int
   user       User    @relation(fields: [userId], references: [id])
   fromUserId Int
-  fromUser   User    @relation("FromUser", fields: [fromUserId], references: [id])
+  fromUser   User    @relation("FromUser", fields: [fromUserId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 }
