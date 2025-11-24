@@ -104,7 +104,7 @@ const EditReport = () => {
           className="flex flex-col items-center mb-5 md:mb-0 md:w-1/2 gap-5"
           onSubmit={handleSubmit(submitHandler)}
         >
-          <div className="w-96">
+          <div className="w-90">
             <label htmlFor="title">Title:</label>
             <input
               type="text"
@@ -117,7 +117,7 @@ const EditReport = () => {
               <p className="text-red-500">{errors.title.message}</p>
             )}
           </div>
-          <div className="w-96">
+          <div className="w-90">
             <label htmlFor="description">Description:</label>
             <textarea
               {...register('description')}
@@ -129,7 +129,7 @@ const EditReport = () => {
               <p className="text-red-500">{errors.description.message}</p>
             )}
           </div>
-          <div className="w-96">
+          <div className="w-90">
             <label htmlFor="type">Type:</label>
             <select
               {...register('type')}
@@ -142,7 +142,7 @@ const EditReport = () => {
               <p className="text-red-500">{errors.type.message}</p>
             )}
           </div>
-          <div className="w-96">
+          <div className="w-90">
             <label htmlFor="image">Image:</label>
             <div className="relative bg-slate-800 px-1 py-2 rounded-lg w-full mt-1 flex items-center justify-between cursor-pointer">
               <span>{watch('image')?.[0]?.name || 'Choose a file...'}</span>
