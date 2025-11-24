@@ -6,8 +6,6 @@ type Props = {
 }
 
 const ProfileComment = ({ comment }: Props) => {
-  console.log(comment)
-
   return (
     <div className="bg-slate-800 rounded-lg p-2">
       <div className="flex gap-3 items-center">

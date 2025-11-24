@@ -27,8 +27,6 @@ const useMessage = (id: string | undefined) => {
     socket.emit('join_conversation', id)
 
     const handleNewMessage = (message: Message) => {
-      console.log(id)
-
       queryClient.setQueryData<Message[]>(['messages', id], (old = []) => [
         ...old,
         message,

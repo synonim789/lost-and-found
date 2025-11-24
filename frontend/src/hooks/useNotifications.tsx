@@ -15,11 +15,8 @@ export const useNotifications = (userId: number | undefined) => {
   useEffect(() => {
     socket.connect()
     socket.emit('join', userId)
-    console.log('connected')
 
     socket.on('notification', () => {
-      console.log('notification arrived')
-
       fetchNotifications()
     })
 

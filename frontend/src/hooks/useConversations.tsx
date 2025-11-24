@@ -24,8 +24,6 @@ const useConversations = () => {
 
   useEffect(() => {
     const refreshConversation = () => {
-      console.log('it should refresh')
-
       queryClient.invalidateQueries({ queryKey: ['conversations'] })
     }
 
