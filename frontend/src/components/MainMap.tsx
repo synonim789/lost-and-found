@@ -44,7 +44,7 @@ const MainMap = () => {
               icon={customIcon}
               key={report.id}
             >
-              <Popup>
+              <Popup autoPan={true} autoPanPaddingTopLeft={[50, 150]}>
                 <PopupContent report={report} />
               </Popup>
             </Marker>
