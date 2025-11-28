@@ -1,9 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import ky, { HTTPError } from 'ky'
+import { HTTPError } from 'ky'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
 import { toast } from 'react-toastify'
+import { api } from '../api/ky'
 import AddReportMap from '../components/AddReportMap'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
@@ -34,7 +35,7 @@ const EditReport = () => {
     const getReport = async () => {
       try {
         const { description, title, image, type, longtitude, latitude } =
-          await ky.get(`http://localhost:3000/report/${id}`).json<ReportType>()
+          await api.get(`report/${id}`).json<ReportType>()
         reset({
           description,
           title,
@@ -77,8 +78,8 @@ const EditReport = () => {
         formData.append('image', file)
       }
 
-      await ky
-        .put(`http://localhost:3000/report/${id}`, {
+      await api
+        .put(`report/${id}`, {
           body: formData,
           credentials: 'include',
         })

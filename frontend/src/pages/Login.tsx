@@ -1,8 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import ky, { HTTPError } from 'ky'
+import { HTTPError } from 'ky'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
+import { api } from '../api/ky'
 import { useAuth } from '../context/authContext'
 import { loginSchema, LoginSchemaType } from '../schemas/login'
 import { User } from '../types'
@@ -23,8 +24,8 @@ const Login = () => {
     password,
   }) => {
     try {
-      const user = await ky
-        .post('http://localhost:3000/auth/login', {
+      const user = await api
+        .post('auth/login', {
           json: { email, passwordRaw: password },
           credentials: 'include',
         })

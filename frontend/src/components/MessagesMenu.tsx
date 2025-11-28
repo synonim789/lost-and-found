@@ -1,8 +1,8 @@
-import ky from 'ky'
 import React, { useEffect, useRef, useState } from 'react'
 import { MdOutlineMessage } from 'react-icons/md'
 import { RiMessage2Fill } from 'react-icons/ri'
 import { useNavigate } from 'react-router'
+import { api } from '../api/ky'
 import { useNotifications } from '../hooks/useNotifications'
 import { NotificationType } from '../types'
 import Dropdown from './Dropdown'
@@ -60,17 +60,14 @@ const MessagesMenu = ({ userId }: Props) => {
           )}
           {notifications.map((n) => {
             const navigateToConversation = async () => {
-              const { data } = await ky
-                .get(
-                  `http://localhost:3000/message/conversation/user/${n.fromUserId}`,
-                  {
-                    credentials: 'include',
-                  }
-                )
+              const { data } = await api
+                .get(`message/conversation/user/${n.fromUserId}`, {
+                  credentials: 'include',
+                })
                 .json<{ data: NotificationType }>()
 
               if (n.isRead === false) {
-                ky.put(`http://localhost:3000/notification/message/${n.id}`, {
+                api.put(`notification/message/${n.id}`, {
                   credentials: 'include',
                 })
               }

@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import ky, { HTTPError } from 'ky'
+import { HTTPError } from 'ky'
 import { CgProfile } from 'react-icons/cg'
 import { FaTrash } from 'react-icons/fa'
 import { toast } from 'react-toastify'
+import { api } from '../api/ky'
 import { useAuth } from '../context/authContext'
 import { CommentType } from '../types'
 
@@ -16,8 +17,8 @@ const ProfileReportComment = ({ comment }: Props) => {
 
   const deleteComment = async () => {
     try {
-      const { message } = await ky
-        .delete(`http://localhost:3000/report/comment/${comment.id}`, {
+      const { message } = await api
+        .delete(`report/comment/${comment.id}`, {
           credentials: 'include',
         })
         .json<{ message: string }>()

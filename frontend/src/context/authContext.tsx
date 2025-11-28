@@ -1,4 +1,3 @@
-import ky from 'ky'
 import {
   createContext,
   ReactNode,
@@ -6,6 +5,7 @@ import {
   useEffect,
   useState,
 } from 'react'
+import { api } from '../api/ky'
 import { User } from '../types'
 
 interface AuthContextType {
@@ -25,8 +25,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await ky
-          .get('http://localhost:3000/auth/me', { credentials: 'include' })
+        const response = await api
+          .get('auth/me', { credentials: 'include' })
           .json<User>()
 
         setUser(response)

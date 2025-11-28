@@ -1,7 +1,7 @@
-import ky from 'ky'
 import React from 'react'
 import { MdOutlineMessage } from 'react-icons/md'
 import { useNavigate } from 'react-router'
+import { api } from '../api/ky'
 import Navbar from '../components/Navbar'
 import { useAuth } from '../context/authContext'
 import { useNotifications } from '../hooks/useNotifications'
@@ -31,17 +31,14 @@ const NotificationMessages = () => {
       )}
       {notifications.map((n) => {
         const navigateToConversation = async () => {
-          const { data } = await ky
-            .get(
-              `http://localhost:3000/message/conversation/user/${n.fromUserId}`,
-              {
-                credentials: 'include',
-              }
-            )
+          const { data } = await api
+            .get(`message/conversation/user/${n.fromUserId}`, {
+              credentials: 'include',
+            })
             .json<{ data: NotificationType }>()
 
           if (n.isRead === false) {
-            ky.put(`http://localhost:3000/notification/message/${n.id}`, {
+            api.put(`notification/message/${n.id}`, {
               credentials: 'include',
             })
           }

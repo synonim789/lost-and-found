@@ -1,6 +1,6 @@
-import ky from 'ky'
 import { useEffect, useRef, useState } from 'react'
 import { FaBell, FaCommentAlt } from 'react-icons/fa'
+import { api } from '../api/ky'
 import { useNotifications } from '../hooks/useNotifications'
 import Dropdown from './Dropdown'
 
@@ -27,7 +27,7 @@ const NotificationMenu = ({ userId }: Props) => {
   }, [])
 
   const setNotificationAsRead = async () => {
-    await ky.put('http://localhost:3000/notification/comment', {
+    await api.put('notification/comment', {
       credentials: 'include',
     })
   }

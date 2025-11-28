@@ -1,9 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import ky, { HTTPError } from 'ky'
+import { HTTPError } from 'ky'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
+import { api } from '../api/ky'
 import AddReportMap from '../components/AddReportMap'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
@@ -46,8 +47,8 @@ export const AddReport = () => {
         formData.append('image', file)
       }
 
-      await ky
-        .post('http://localhost:3000/report', {
+      await api
+        .post('report', {
           body: formData,
           credentials: 'include',
         })

@@ -1,13 +1,13 @@
-import ky from 'ky'
 import { useEffect, useState } from 'react'
+import { api } from '../api/ky'
 import { NotificationType } from '../types'
 import { socket } from '../utils/socket'
 
 export const useNotifications = (userId: number | undefined) => {
   const [notifications, setNotifications] = useState<NotificationType[]>([])
   const fetchNotifications = async () => {
-    const data = await ky
-      .get('http://localhost:3000/notification', { credentials: 'include' })
+    const data = await api
+      .get('notification', { credentials: 'include' })
       .json<NotificationType[]>()
     setNotifications(data)
   }

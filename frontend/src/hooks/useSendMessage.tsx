@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import ky, { HTTPError } from 'ky'
+import { HTTPError } from 'ky'
 import { toast } from 'react-toastify'
+import { api } from '../api/ky'
 import { SendMessageSchemType } from '../schemas/sendMessage'
 import { Message } from '../types'
 
@@ -9,8 +10,8 @@ export const useSendMessage = (conversationId: string | undefined) => {
 
   return useMutation({
     mutationFn: async ({ content }: SendMessageSchemType) => {
-      return ky
-        .post(`http://localhost:3000/message/${conversationId}`, {
+      return api
+        .post(`message/${conversationId}`, {
           json: {
             content,
           },

@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import ky from 'ky'
 import { useEffect } from 'react'
+import { api } from '../api/ky'
 import { Message } from '../types'
 import { socket } from '../utils/socket'
 
@@ -8,8 +8,8 @@ const useMessage = (id: string | undefined) => {
   const queryClient = useQueryClient()
 
   const getMessages = async (): Promise<Message[]> => {
-    const { data } = await ky
-      .get(`http://localhost:3000/message/${id}`, {
+    const { data } = await api
+      .get(`message/${id}`, {
         credentials: 'include',
       })
       .json<{ data: Message[] }>()

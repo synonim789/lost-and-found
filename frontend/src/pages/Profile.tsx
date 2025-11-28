@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import ky from 'ky'
 import { useParams } from 'react-router'
+import { api } from '../api/ky'
 import ProfileComment from '../components/ProfileComment'
 import ProfileReport from '../components/ProfileReport'
 import { CommentType, ReportType, User } from '../types'
@@ -14,8 +14,8 @@ const Profile = () => {
       reports: ReportType[]
     }
   > => {
-    const data = await ky
-      .get(`http://localhost:3000/user/${id}`, {
+    const data = await api
+      .get(`user/${id}`, {
         credentials: 'include',
       })
       .json<User & { comments: CommentType[]; reports: ReportType[] }>()

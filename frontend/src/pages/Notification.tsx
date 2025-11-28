@@ -1,6 +1,6 @@
-import ky from 'ky'
 import { useEffect } from 'react'
 import { FaCommentAlt } from 'react-icons/fa'
+import { api } from '../api/ky'
 import Navbar from '../components/Navbar'
 import { useAuth } from '../context/authContext'
 import { useNotifications } from '../hooks/useNotifications'
@@ -10,7 +10,7 @@ const Notification = () => {
   const { notifications } = useNotifications(user?.id)
 
   const setNotificationAsRead = async () => {
-    await ky.put('http://localhost:3000/notification/comment', {
+    await api.put('notification/comment', {
       credentials: 'include',
     })
   }

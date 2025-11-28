@@ -1,3 +1,3 @@
 export const getImage = (imageName: string) => {
-  return `http://localhost:3000${imageName}`
+  return `${import.meta.env.VITE_BACKEND_URL}${imageName}`
 }

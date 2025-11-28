@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
-import ky from 'ky'
 import { Icon } from 'leaflet'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import { api } from '../api/ky'
 import icon from '../assets/icon.png'
 import { center } from '../constants'
 import { ReportType } from '../types'
@@ -14,9 +14,7 @@ const MainMap = () => {
   })
 
   const getReports = async (): Promise<ReportType[]> => {
-    const { data } = await ky
-      .get('http://localhost:3000/report')
-      .json<{ data: ReportType[] }>()
+    const { data } = await api.get('report').json<{ data: ReportType[] }>()
     return data
   }
 

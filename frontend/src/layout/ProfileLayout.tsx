@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
-import ky from 'ky'
 import { Link, Outlet, useParams } from 'react-router'
 import { toast } from 'react-toastify'
+import { api } from '../api/ky'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
 import { useAuth } from '../context/authContext'
@@ -17,8 +17,8 @@ const ProfileLayout = () => {
       reports: ReportType[]
     }
   > => {
-    const data = await ky
-      .get(`http://localhost:3000/user/${id}`, {
+    const data = await api
+      .get(`user/${id}`, {
         credentials: 'include',
       })
       .json<User & { comments: CommentType[]; reports: ReportType[] }>()
@@ -27,7 +27,7 @@ const ProfileLayout = () => {
   }
 
   const deleteUser = async () => {
-    await ky.delete('http://localhost:3000/user', { credentials: 'include' })
+    await api.delete('user', { credentials: 'include' })
     toast.success('User deleted succesfully')
     setUser(null)
   }

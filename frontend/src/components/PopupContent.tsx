@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import ky from 'ky'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import { MdOutlineMessage } from 'react-icons/md'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
+import { api } from '../api/ky'
 import { REPORT_TYPE } from '../constants'
 import { useAuth } from '../context/authContext'
 import { ReportType } from '../types'
@@ -22,8 +22,8 @@ const PopupContent = ({ report }: Props) => {
   const label = REPORT_TYPE.find((r) => r.value === report.type)?.label
 
   const deleteReport = async () => {
-    const { message } = await ky
-      .delete(`http://localhost:3000/report/${report.id}`, {
+    const { message } = await api
+      .delete(`report/${report.id}`, {
         credentials: 'include',
       })
       .json<{ message: string }>()
@@ -31,8 +31,8 @@ const PopupContent = ({ report }: Props) => {
   }
 
   const navigateToConversation = async () => {
-    const { id } = await ky
-      .get(`http://localhost:3000/message/conversation/${report.userId}`, {
+    const { id } = await api
+      .get(`message/conversation/${report.userId}`, {
         credentials: 'include',
       })
       .json<{ id: string }>()

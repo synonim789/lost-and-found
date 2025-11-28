@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import ky from 'ky'
 import { useEffect } from 'react'
+import { api } from '../api/ky'
 import { Conversation } from '../types'
 import { socket } from '../utils/socket'
 
@@ -8,8 +8,8 @@ const useConversations = () => {
   const queryClient = useQueryClient()
 
   const getConversations = async (): Promise<Conversation[]> => {
-    const { data } = await ky
-      .get('http://localhost:3000/message/conversation', {
+    const { data } = await api
+      .get('message/conversation', {
         credentials: 'include',
       })
       .json<{ data: Conversation[] }>()

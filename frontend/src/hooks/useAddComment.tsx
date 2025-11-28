@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import ky, { HTTPError } from 'ky'
+import { HTTPError } from 'ky'
 import { toast } from 'react-toastify'
+import { api } from '../api/ky'
 import { AddCommentSchemaType } from '../schemas/addComment'
 
 export const useAddComment = (reportId: number, queryKey: string) => {
@@ -8,8 +9,8 @@ export const useAddComment = (reportId: number, queryKey: string) => {
 
   return useMutation({
     mutationFn: async ({ text }: AddCommentSchemaType) => {
-      return ky
-        .post(`http://localhost:3000/report/${reportId}/comment`, {
+      return api
+        .post(`report/${reportId}/comment`, {
           json: {
             text,
           },

@@ -1,8 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import ky, { HTTPError } from 'ky'
+import { HTTPError } from 'ky'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
 import { toast } from 'react-toastify'
+import { api } from '../api/ky'
 import { useAuth } from '../context/authContext'
 import { updateUserSchema, UpdateUserSchemaType } from '../schemas/updateUser'
 
@@ -35,8 +36,8 @@ const UpdateUser = () => {
     name,
   }) => {
     try {
-      const { message } = await ky
-        .put('http://localhost:3000/user', {
+      const { message } = await api
+        .put('user', {
           json: { name, lastName },
           credentials: 'include',
         })

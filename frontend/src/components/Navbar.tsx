@@ -1,9 +1,9 @@
-import ky from 'ky'
 import { useState } from 'react'
 import { FaRocketchat } from 'react-icons/fa'
 import { FiUser } from 'react-icons/fi'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
+import { api } from '../api/ky'
 import { useAuth } from '../context/authContext'
 import MessagesMenu from './MessagesMenu'
 import MobileNavbar from './MobileNavbar'
@@ -15,8 +15,8 @@ const Navbar = () => {
   const { user, setUser } = useAuth()
 
   const logout = async () => {
-    const { message } = await ky
-      .post('http://localhost:3000/auth/logout', {
+    const { message } = await api
+      .post('auth/logout', {
         credentials: 'include',
       })
       .json<{ message: string }>()
